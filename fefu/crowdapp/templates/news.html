@@ -1,0 +1,106 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <script src="{% static 'js/index.js' %}"></script>
+    
+</head>
+
+<body class="bg-[#EFEFEF]">
+    <header class="h-[15vh] w-full bg-[#EFEFEF] p-4 ">
+        <div class="relative h-full flex lg:justify-center items-center space-x-10">
+          <logo class="h-full flex items-center lg:justify-center">
+              <div class="w-[150px] md:w-[200px]">
+                  <img src="{% static 'img/Group 77.png' %}" class="w-[100%] lg:w-full" alt="">
+              </div>
+          </logo>
+          <div class="hidden md:flex justify-center items-center h-full w-[50%]">
+            <div class="h-full flex items-center md:w-full relative">
+                <button class="absolute size-[25px] right-2">
+                    <img src="{% static 'img/lupa.svg' %}" alt="">
+                </button>
+                <input type="text" placeholder="search" class="w-full bg-[#F17E34] placeholder-white text-white text-3xl pl-2 pr-10 pl-[15px] font-bold rounded-2xl">
+            </div>
+                
+          </div>
+          <nav class="hidden lg:grid grid-cols-5 w-full h-full items-center text-center text-[#303196] font-bold lg:text-2xl xl:text-4xl">
+            <a href="{% url 'main' %}" class=" hover:underline">Home</a>
+            <a href="{% url 'about' %}" class=" hover:underline">About</a>
+            <a href="{% url 'news' %}" class="underline">News</a>
+            <a href="#PSH" class=" hover:underline">Contacts</a>
+            <a href="{% url 'login' %}" class=" flex justify-center hover:underline" id="Login">Log in</a>
+            <!-- Account img -->
+            <div class=" hidden justify-center" id="photo">
+              <button class="rounded-full border-2 border-black w-[80px] h-[80px] flex items-center overflow-hidden">
+                <img src="{% static 'img/IMG_3811 1.png' %}" alt="">
+              </button>
+            </div>
+            <!-- Account img -->
+          </nav>
+          <button class="absolute right-2 lg:hidden h-[50px] w-[50px]" onclick="main()">
+            <img src="{% static 'img/open-menu_4083576.png' %}" alt="">
+          </button>
+          <div id="Mobile" class="hidden grid grid-cols-5 gap-2 text-center font-bold text-[#303196] text-xl sm:text-2xl top-[80%] border-2 border-black rounded-2xl py-5 right-0 bg-[#EFEFEF] z-50 shadow-lg h-[80px] w-full absolute "> 
+            <a href="{% url 'main' %}" class=" hover:underline">Home</a>
+            <a href="#" class=" hover:underline">About</a>
+            <a href="{% url 'news' %}" class=" hover:underline">News</a>
+            <a href="#PSH" class=" hover:underline">Contacts</a>
+            <a href="{% url 'login' %}" class=" hover:underline">Log in</a>
+          </div>  
+        </div>
+      </header>
+
+      <main class="flex justify-center items-center h-full text-[100px] font-bold text-center">
+        <p>
+           Novostey nema<br/>
+           Mi skoro vse umrem((
+        </p>
+      </main>
+
+      <footer class="mt-[200px] w-full bg-[#EFEFEF]">
+        <!-- Верхний блок -->
+        <div class="h-[100px] w-full bg-[#EFEFEF] flex justify-center items-center">
+          <img src="{% static 'img/Group 77.png' %}" alt="Company Logo" class="h-[50px] sm:h-[80px]" />
+        </div>
+      
+        <!-- Нижний блок -->
+        <div class="bg-[#DFE6FF] px-4 sm:px-10 md:px-20 py-8 grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 relative">
+          <div class="absolute bottom-0 right-0">
+            <a href="{% url 'main' %}" id="PSH" class="text-sm hove:underline text-[#DFE64F]">Пасхалка</a>
+          </div>
+          <!-- Компания -->
+          <div class="text-center">
+            <p class="text-2xl sm:text-3xl lg:text-4xl text-black font-bold">Company</p>
+            <div class="mt-4 text-[#303196] text-2xl sm:text-xl lg:text-3xl space-y-2">
+              <a href="#" class="hover:underline block ">About</a>
+              <a href="#" class="hover:underline block">News</a>
+              <a href="#" class="hover:underline block">FAQ</a>
+            </div>
+          </div>
+      
+          <!-- Соцсети -->
+          <div class="text-center">
+            <p class="text-2xl sm:text-3xl lg:text-4xl text-black font-bold">Social media</p>
+            <div class="mt-4 text-[#303196] text-2xl sm:text-xl lg:text-3xl space-y-2">
+              <a href="https://vk.com/dumnkonechno" class="hover:underline block" >VK</a>
+              <a href="https://t.me/Utinoelico" class="hover:underline block">Telegram</a>
+              <a href="#" class="hover:underline block">Instagram</a>
+            </div>
+          </div>
+      
+          <!-- Поддержка -->
+          <div class="text-center">
+            <p class="text-2xl sm:text-3xl lg:text-4xl text-black font-bold">Support</p>
+            <div class="mt-4 text-[#303196] text-2xl sm:text-xl lg:text-3xl space-y-2 ">
+              <a href="tel:+79004252642" class="hover:underline block">+7 (900) 425-26-42</a>
+              <a href="mailto:muzychenko.yd@dvfu.ru" class="hover:underline block">muzychenko.yd@dvfu.ru</a>
+              <a href="{% url 'faq' %}" class="hover:underline block">FAQ</a>
+            </div>
+          </div>
+        </div>
+      </footer>
+</body>

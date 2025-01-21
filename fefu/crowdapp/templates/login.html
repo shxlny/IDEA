@@ -1,0 +1,73 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <script src="{% static 'js/login.js' %}"></script>
+</head>
+<body>
+    <div class="h-screen bg-[#EFEFEF]">
+        <header class="h-[15vh] w-full bg-[#EFEFEF] p-4 ">
+          <div class="relative h-full flex lg:justify-center items-center space-x-10">
+            <logo class="h-full flex items-center lg:justify-center">
+                <div class="w-[150px] md:w-[200px]">
+                    <img src="{% static 'img/Group 77.png' %}" class="w-[100%] lg:w-full" alt="">
+                </div>
+            </logo>
+            <div class="hidden md:flex justify-center items-center h-full w-[50%]">
+              <div class="h-full flex items-center md:w-full relative">
+                  <button class="absolute size-[25px] right-2">
+                      <img src="{% static 'img/lupa.svg' %}" alt="">
+                  </button>
+                  <input type="text" placeholder="search" class="w-full bg-[#F17E34] placeholder-white text-white text-3xl pl-2 pr-10 pl-[15px] font-bold rounded-2xl">
+              </div>
+            </div>
+            <nav class="hidden lg:grid grid-cols-5 w-full h-full items-center text-center text-[#303196] font-bold lg:text-2xl xl:text-4xl">
+              <a href="{% url 'main' %}" class=" hover:underline">Home</a>
+              <a href="{% url 'about' %}" class=" hover:underline">About</a>
+              <a href="{% url 'news' %}" class=" hover:underline">News</a>
+              <a href="#" class=" hover:underline">Contacts</a>
+              <a href="{% url 'login' %}" class="underline">Log in</a>
+            </nav>
+          </div>
+        </header>
+
+        <main class="px-4 sm:px-8 md:px-16 lg:px-[60px] pt-6 sm:pt-10 h-auto block">
+          <section class="min-h-[500px]">
+            <div class="grig h-full justify-center">
+              <p class="text-5xl text-[#303196] text-center font-bold">Welcome back!</p>
+              <div class="flex justify-center pt-10">
+                <div class="min-h-[600px] min-w-[400px] xl:min-w-[800px] border-4 border-[#303196] rounded-[77px] flex justify-center items-center">
+                  <div class="h-[550px] w-[95%] px-5 sm:px-20 border-4 border-[#303196] rounded-[56px] block">
+                    <div class="w-full text-5xl text-center text-black font-bold">
+                      <p class="pt-10 pb-10">Log In</p>
+                    </div>
+                    <form method="post" action="{% url 'login' %}" class="grid items-center">
+                      {% csrf_token %}
+                      <div class="grid gap-8 h-auto w-auto">
+                        <input type="text" name="nickname" class="w-auto h-[50px] sm:h-[80px] bg-[#B1C0E5] rounded-[26px] pl-5 font-bold text-3xl placeholder-[#6C6DCC]" placeholder="Nickname" required>
+                        <input type="password" name="password" class="w-full h-[50px] sm:h-[80px] bg-[#B1C0E5] rounded-[26px] pl-5 font-bold text-3xl placeholder-[#6C6DCC]" placeholder="Password" required>
+                        <div class="flex justify-center">
+                          <button type="submit" class="border-4 border-[#303196] sm:w-[360px] w-[180px] h-[60px] sm:h-[90px] text-3xl font-bold rounded-[26px] flex items-center justify-center">
+                            Continue
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                    <div class="text-center text-2xl font-bold text-[#747373]">
+                      <p>Don’t have an account?
+                        <a href="{% url 'register' %}" class="underline hover:text-[#F17E34]">Create here!</a>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </main>
+    </div>
+</body>
+</html>
