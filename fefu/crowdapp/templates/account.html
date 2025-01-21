@@ -44,9 +44,8 @@
 
         <main class="flex justify-center w-full h-auto">
             <div class="w-[80%] xl:w-[50%] h-[90%] border-4 rounded-[30px] xl:rounded-[40px] border-[#303196] flex justify-center items-center p-2  ">
-                <div class="w-full h-full border-4 rounded-[25px] border-[#303196]  justify-center relative">
+                <div class="w-full h-full border-4 rounded-[25px] border-[#303196]  justify-center relative p-4">
                     <div class="w-full h-auto flex justify-center">
-
                             <div class="w-full h-auto sm:flex justify-center py-4 sm:py-[30px] sm:gap-6">
                                 <div class="flex flex-col items-start ">
                                     <div class="w-full flex justify-center">
@@ -61,7 +60,8 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="pt-4 sm:pt-0 w-auto flex flex-col justify-start items-center">
+                                <div class="w-full h-auto flex justify-center">
+                                    <div class="pt-4 sm:pt-0 w-[90%] flex flex-col justify-start items-center">
                                     <div class="w-[90%] h-[60px] bg-white border-4 rounded-[15px] border-[#303196] flex items-center justify-center">
                                         <input id="nicknameField"
                                                class="text-[30px] md:text-[55px]  font-bold text-[#303196] text-center w-[300px] outline-none bg-transparent"
@@ -69,17 +69,20 @@
                                                value="{{ nickname }}" />
                                     </div>
                                     <button id="changeNicknameButton"
-                                            class="mt-4 w-[60%] h-[40px] bg-[#F17E34] rounded-xl shadow-xl font-bold text-black text-xl md:text-2xl">
+                                            class="mt-4 w-[80%] h-[40px] bg-[#F17E34] rounded-xl shadow-xl font-bold text-black text-xl md:text-2xl">
                                         Change Nickname
                                     </button>
                                 </div>
+                                </div>
+
                             </div>
 
                     </div>
                     <div class="w-full h-auto flex justify-center">
-                        <form method="post">
+                        <div class="w-[90%]  justify-center">
+                            <form method="post">
                         {% csrf_token %}
-                        <dic class="h-fit w-full grid justify-center items-center">
+                        <dic class="h-fit w-full">
                             <div class="w-full flex justify-center">
                                 <textarea class="h-[70px] w-[90%] border-4 rounded-[15px] border-[#303196] font-bold pl-2 pt-2 text-2xl xl:text-[45px]"
                                   name="idea_title" placeholder="title">{{ idea_title }}</textarea>
@@ -95,9 +98,11 @@
                                 </button>
                             </div>
 
-                        </dic>
+                            </dic>
 
                         </form>
+                        </div>
+
                     </div>
 
 
