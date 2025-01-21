@@ -25,11 +25,12 @@
                         <input type="text" placeholder="search" class="w-full bg-[#F17E34] placeholder-white text-white text-3xl pl-2 pr-10 pl-[15px] font-bold rounded-2xl">
                     </div>
                 </div>
-                <nav class="hidden lg:grid grid-cols-4 w-full h-full items-center text-center text-[#303196] font-bold lg:text-2xl xl:text-4xl">
+                <nav class="hidden lg:grid grid-cols-5 w-full h-full items-center text-center text-[#303196] font-bold lg:text-2xl xl:text-4xl">
                     <a href="{% url 'main' %}" class="hover:underline">Home</a>
                     <a href="{% url 'about' %}" class="hover:underline">About</a>
                     <a href="{% url 'news' %}" class="hover:underline">News</a>
                     <a href="#PSH" class="hover:underline">Contacts</a>
+                    <a href="{% url 'login' %}" class=" hover:underline">Log out</a>
                 </nav>
                 <button class="absolute right-2 lg:hidden h-[50px] w-[50px]" onclick="main()">
                     <img src="{% static 'img/open-menu_4083576.png' %}" alt="">
@@ -118,9 +119,8 @@
               <div class="text-center">
                 <p class="text-2xl sm:text-3xl lg:text-4xl text-black font-bold">Company</p>
                 <div class="mt-4 text-[#303196] text-2xl sm:text-xl lg:text-3xl space-y-2">
-                  <a href="#" class="hover:underline block ">About</a>
-                  <a href="#" class="hover:underline block">News</a>
-                  <a href="#" class="hover:underline block">FAQ</a>
+                  <a href="{% url 'about' %}" class="hover:underline block ">About</a>
+                  <a href="{% url 'news' %}" class="hover:underline block">News</a>
                 </div>
               </div>
 
