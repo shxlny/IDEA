@@ -88,34 +88,45 @@
                     <div class="w-full h-auto flex justify-center">
                         <div class="w-full  justify-center">
                             <form method="post">
-                        {% csrf_token %}
-                        <dic class="h-fit w-full">
-                            <div class="w-full flex justify-center">
-                                <textarea class="h-[70px] w-[90%] border-4 rounded-[15px] border-[#303196] font-bold pl-2 pt-2 text-2xl xl:text-[45px]"
-                                  name="idea_title" placeholder="title">{{ idea_title }}</textarea>
-                            </div>
-                            <div class="w-full flex justify-center">
-                                <textarea class="mt-4 h-[150px]  w-[90%] border-4 rounded-[15px] border-[#303196] font-bold p-4 text-2xl xl:text-[40px] resize-none focus:outline-none placeholder:text-gray-400"
-                                  name="idea_desc" placeholder="Enter your description">{{ idea_desc }}</textarea>
-                            </div>
+                                {% csrf_token %}
+                                <dic class="h-fit w-full">
+                                    <div class="w-full flex justify-center">
+                                        <textarea class="h-[70px] w-[90%] border-4 rounded-[15px] border-[#303196] font-bold pl-2 pt-2 text-2xl xl:text-[45px]"
+                                          name="idea_title" placeholder="title">{{ idea_title }}</textarea>
+                                    </div>
+                                    <div class="w-full flex justify-center">
+                                        <textarea class="mt-4 h-[150px]  w-[90%] border-4 rounded-[15px] border-[#303196] font-bold p-4 text-2xl xl:text-[40px] resize-none focus:outline-none placeholder:text-gray-400"
+                                          name="idea_desc" placeholder="Enter your description">{{ idea_desc }}</textarea>
+                                    </div>
 
-                            <div class="flex w-full justify-center">
-                                <button type="submit" class="mt-4 w-[50%] h-[60px]  rounded-xl  bg-[#F17E34] text-4xl font-bold text-black shadow-xl">
-                                    Publish
-                                </button>
-                            </div>
-
-                            </dic>
-
-                        </form>
+                                    <div class="flex w-full justify-center">
+                                        <button type="submit" id="publishButton" class="mt-4 w-[50%] h-[60px]  rounded-xl  bg-[#F17E34] text-4xl font-bold text-black shadow-xl">
+                                            Publish
+                                        </button>
+                                    </div>
+                                </dic>
+                            </form>
                         </div>
-
                     </div>
-
-
                 </div>
             </div>
         </main>
+        <div id="popupModal" class="hidden fixed top-0 flex left-0 w-full h-full bg-black bg-opacity-50 items-start justify-center z-50">
+            <div class="border-4 border-[#F17E34] fixed flex items-center top-[120px] bg-white w-[90%] sm:w-[60%] xl:w-[40%] h-fit p-2 rounded-[15px] shadow-lg">
+                <div class="flex h-fit items-center border-4 border-[#303196] rounded-[8px]">
+                    <img src="{% static 'img/Новичок.png' %}" class="h-[64px] w-[64px] sm:w-[128px]  sm:h-[128px]" />
+                </div>
+                <div class="flex items-center pl-4">
+                    <h1 class="text-[18px] lg:text-[30px] 2xl:text-[38px] font-bold">
+                        Action: Share your first idea.
+                        <br>Reward: Newbie Badge.
+                    </h1>
+                </div>
+                <button id="x-button" class="top-0 right-2 absolute text-2xl sm:text-4xl font-bold">
+                    x
+                </button>
+            </div>
+        </div>
         <footer class=" w-full bg-[#EFEFEF]">
             <!-- Верхний блок -->
             <div class="h-[100px] w-full bg-[#EFEFEF] flex justify-center items-center">
