@@ -2,6 +2,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const nicknameField = document.querySelector('#nicknameField');
     const changeNicknameButton = document.querySelector('#changeNicknameButton');
 
+
+
     // Проверка подключения обработчика
     console.log("Script loaded and button ready.");
     // Обработчик кнопки
@@ -36,6 +38,31 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error('Error:', error);
         });
     });
+/// Высвечивание ачивки при публикации
+    const publishButton = document.getElementById("publishButton");
+    const modal = document.getElementById("popupModal");
+    const newbie = document.getElementById("Newbie")
+    const closeButton = document.getElementById("x-button");
+
+    let isModalShown = false;
+
+    if (publishButton) {
+        publishButton.addEventListener("click", (event) => {
+            if (!isModalShown) {
+                event.preventDefault();
+                modal.classList.remove("hidden");
+                newbie.classList.remove("hidden")
+                isModalShown = true;
+
+            }
+        });
+    }
+
+    if (closeButton) {
+        closeButton.addEventListener("click", () => {
+            modal.classList.add("hidden");
+        });
+    }
 });
 
 // Получение CSRF токена из cookie
@@ -55,24 +82,4 @@ function getCookie(name) {
 }
 
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Получаем элементы
-    const publishButton = document.querySelector("publishButton") // Кнопка "Publish"
-    const modal = document.querySelector("popupModal"); // Модальное окно
-    const closeButton = document.querySelector("x-button"); // Кнопка "x" для закрытия модального окна
 
-    let isModalShown = false; // Флаг, который отслеживает, было ли модальное окно уже открыто
-
-  // Обработчик для кнопки "Publish"
-    publishButton.addEventListener("click", (event) => {
-        if (!isModalShown) {
-            event.preventDefault(); // Останавливаем стандартное поведение формы (чтобы модальное окно успело показаться)
-            modal.classList.remove("hidden"); // Показываем модальное окно
-            isModalShown = true; // Устанавливаем флаг, чтобы окно больше не открывалось
-        }
-    });
-  // Обработчик для кнопки закрытия "x"
-    closeButton.addEventListener("click", () => {
-        modal.classList.add("hidden"); // Скрываем модальное окно
-        });
-});

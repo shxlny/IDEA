@@ -67,19 +67,28 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="w-full h-auto flex justify-center">
-                                    <div class="pt-4 sm:pt-0 w-[90%] flex flex-col justify-start items-center">
-                                    <div class="w-[90%] h-[60px] bg-white border-4 rounded-[15px] border-[#303196] flex items-center justify-center">
-                                        <input id="nicknameField"
-                                               class="text-[30px] md:text-[55px]  font-bold text-[#303196] text-center w-[300px] outline-none bg-transparent"
-                                               type="text"
-                                               value="{{ nickname }}" />
+                                <div class="w-full h-auto justify-center lg:pl-10">
+                                    <div class="pt-4 sm:pt-0 w-full flex flex-col justify-start items-center">
+                                        <div class="w-full h-[60px] bg-white border-4 rounded-[15px] border-[#303196] flex items-center justify-center">
+                                            <input id="nicknameField"
+                                                   class="text-[30px] md:text-[55px]  font-bold text-[#303196] text-center w-[300px] outline-none bg-transparent"
+                                                   type="text"
+                                                   value="{{ nickname }}"
+                                            />
+
+                                        </div>
+                                        <button id="changeNicknameButton"
+                                                class="mt-4 w-[80%] h-[40px] bg-[#F17E34] rounded-xl shadow-xl font-bold text-black text-xl md:text-2xl">
+                                            Change Nickname
+                                        </button>
+                                        <div class="w-full h-full pt-8 flex justify-center">
+                                            <img id="Newbie" src="{% static 'img/Новичок.png' %}" class="hidden h-[64px] w-[64px] hover:scale-150 transition ease-in-out " />
+                                            <img src="{% static 'img/Конструктивный критик.png' %}" class="hidden h-[64px] w-[64px] hover:scale-150 transition ease-in-out" />
+                                            <img src="{% static 'img/марафон.png' %}" class="hidden h-[64px] w-[64px] hover:scale-150 transition ease-in-out" />
+                                            <img src="{% static 'img/ш-общительная.png' %}" class="hidden h-[64px] w-[64px] hover:scale-150 transition ease-in-out" />
+                                            <img src="{% static 'img/долгожитель.png' %}" class="hidden h-[64px] w-[64px] hover:scale-150 transition ease-in-out" />
+                                        </div>
                                     </div>
-                                    <button id="changeNicknameButton"
-                                            class="mt-4 w-[80%] h-[40px] bg-[#F17E34] rounded-xl shadow-xl font-bold text-black text-xl md:text-2xl">
-                                        Change Nickname
-                                    </button>
-                                </div>
                                 </div>
 
                             </div>
