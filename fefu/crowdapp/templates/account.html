@@ -9,8 +9,8 @@
     <script src="{% static 'js/account.js' %}"></script>
 </head>
 <body class="h-auto bg-[#EFEFEF]">
-    <div class="h-[100vh] bg-[#EFEFEF]">
-        <header class="h-[15vh] w-full bg-[#EFEFEF] p-4">
+    <div class="h-auto bg-[#EFEFEF]">
+         <header class="h-[15vh] w-full bg-[#EFEFEF] p-4">
             <div class="relative h-full flex lg:justify-center items-center space-x-10">
                 <logo class="h-full flex items-center lg:justify-center">
                     <div class="w-[150px] md:w-[200px]">
@@ -25,15 +25,23 @@
                         <input type="text" placeholder="search" class="w-full bg-[#F17E34] placeholder-white text-white text-3xl pl-2 pr-10 pl-[15px] font-bold rounded-2xl">
                     </div>
                 </div>
-                <nav class="hidden lg:grid grid-cols-4 w-full h-full items-center text-center text-[#303196] font-bold lg:text-2xl xl:text-4xl">
+                <nav class="hidden lg:grid grid-cols-5 w-full h-full items-center text-center text-[#303196] font-bold lg:text-2xl xl:text-4xl">
                     <a href="{% url 'main' %}" class="hover:underline">Home</a>
                     <a href="{% url 'about' %}" class="hover:underline">About</a>
                     <a href="{% url 'news' %}" class="hover:underline">News</a>
                     <a href="#PSH" class="hover:underline">Contacts</a>
+                    <a href="{% url 'login' %}" class=" hover:underline">Log out</a>
                 </nav>
                 <button class="absolute right-2 lg:hidden h-[50px] w-[50px]" onclick="main()">
                     <img src="{% static 'img/open-menu_4083576.png' %}" alt="">
                 </button>
+                <div id="Mobile" class="hidden grid grid-cols-5 gap-2 text-center font-bold text-[#303196] text-xl sm:text-2xl top-[80%] border-2 border-black rounded-2xl py-5 right-0 bg-[#EFEFEF] z-50 shadow-lg h-[80px] w-full absolute ">
+                    <a href="{% url 'main' %}" class=" hover:underline">Home</a>
+                    <a href="{% url 'about' %}" class=" hover:underline">About</a>
+                    <a href="{% url 'news' %}" class=" hover:underline">News</a>
+                    <a href="#PSH" class=" hover:underline">Contacts</a>
+                    <a href="{% url 'login' %}" class=" hover:underline">Log out</a>
+                </div>
             </div>
         </header>
 
@@ -42,94 +50,110 @@
         </h1>
 
         <main class="flex justify-center w-full h-auto">
-            <div class="w-[95%] h-[75vh] border-4 rounded-[30px] xl:rounded-[50px] border-[#303196] flex justify-center items-center">
-                <div class="w-[98%] h-[98%] xl:h-[95%] border-4 rounded-[25px] border-[#303196] grid xl:grid-cols-2 justify-center">
-                    <div class="w-full h-[300px] xl:h-full flex justify-center">
-                        <div class="w-full h-full">
-                            <div class="w-full h-full grid grid-cols-2 pt-[30px] xl:pt-[80px] gap-6">
-                                <div class="flex flex-col justify-center items-center">
-                                    <div class="w-[150px] h-[150px] md:w-[280px] md:h-[280px] bg-white border-4 rounded-[15px] border-[#303196] overflow-hidden">
-                                        <img class="h-auto w-auto" src="{% static 'img/IMG_3813 1.png' %}" alt="">
-                                    </div>
-                                    <button id="changePhotoButton"
-                                            class="mt-4 w-[175px] h-[60px] bg-[#F17E34] rounded-[15px] shadow-xl font-bold text-black text-xl md:text-2xl">
-                                        Change Photo
-                                    </button>
-                                </div>
-                                <div class="flex flex-col justify-center items-center">
-                                    <div class="w-auto h-[80px] bg-white border-4 rounded-[15px] border-[#303196] flex items-center justify-center">
-                                        <input id="nicknameField"
-                                               class="text-[30px] md:text-[55px] xl:text-[80px] font-bold text-[#303196] text-center w-full outline-none bg-transparent"
-                                               type="text"
-                                               value="{{ nickname }}" />
-                                    </div>
-                                    <button id="changeNicknameButton"
-                                            class="mt-4 w-[250px] h-[60px] bg-[#F17E34] shadow-xl rounded-[15px] font-bold text-black text-xl md:text-2xl">
+            <div class="w-[80%] xl:w-[50%] h-[90%] border-4 rounded-[30px] xl:rounded-[40px] border-[#303196] flex justify-center items-center p-2  ">
+                <div class="w-full h-full border-4 rounded-[25px] border-[#303196] justify-center relative p-4">
+                    <!-- Блок профиля -->
+                    <div class="w-full h-auto flex justify-center">
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-white border-4 rounded-[15px] border-[#303196] overflow-hidden">
+                                {% if user.profile.avatar %}
+                                    <img src="{{ user.profile.avatar.url }}" alt="Current Avatar">
+                                {% else %}
+                                    <img src="/media/avatars/default.png" alt="Default Avatar">
+                                {% endif %}
+                            </div>
+                            <form id="photoForm" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <input id="avatarInput" type="file" name="avatar" class="hidden" onchange="this.form.submit();">
+                                <button type="button" id="changePhotoButton"
+                                    class="mt-4 w-[80%] h-[40px] bg-[#F17E34] rounded-xl shadow-xl font-bold text-black text-xl md:text-2xl"
+                                    onclick="document.getElementById('avatarInput').click();">
+                                    Change Photo
+                                </button>
+                            </form>
+                            <!-- Форма изменения никнейма -->
+                            <form method="POST" class="w-full">
+                                {% csrf_token %}
+                                <div class="w-full pt-4 flex flex-col justify-center items-center">
+                                    <!-- Используем ваше поле ввода для никнейма, передавая данные через форму -->
+                                    <input type="text" name="nickname" class="text-[30px] md:text-[55px] font-bold text-[#303196] text-center w-[300px] outline-none bg-white border-4 rounded-[15px] border-[#303196]"
+                                        value="{{ nickname_form.nickname.value|default:user.username }}">
+
+                                    <!-- Кнопка отправки формы -->
+                                    <button type="submit" class="mt-4 w-[80%] h-[40px] bg-[#F17E34] rounded-xl shadow-xl font-bold text-black text-xl md:text-2xl">
                                         Change Nickname
                                     </button>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <form method="post">
-                        {% csrf_token %}
-                        <dic class="grid justify-center items-center">
-                            <textarea class="h-[50px] xl:h-[100px] w-[90%] border-4 rounded-[15px] border-[#303196] font-bold pl-2 pt-2 text-2xl xl:text-[45px]"
-                                  name="idea_title" placeholder="title">{{ idea_title }}</textarea>
-                            <textarea class="mt-4 h-[150px] xl:h-[250px] w-[90%] border-4 rounded-[15px] border-[#303196] font-bold p-4 text-2xl xl:text-[40px] resize-none focus:outline-none placeholder:text-gray-400"
-                                  name="idea_desc" placeholder="Enter your description">{{ idea_desc }}</textarea>
-                            <button type="submit" class="mt-4 w-[50%] h-[40px] xl:h-[100px] rounded-xl xl:rounded-[25px] bg-[#F17E34] text-4xl font-bold text-black shadow-xl">
-                            Publish
-                            </button>
-                        </dic>
+                            </form>
 
+                        </form>
+                    </div>
+
+                    <!-- Блок для добавления идей -->
+                    <form method="POST" action="{% url 'add_idea' %}" class="w-full">
+                        {% csrf_token %}
+                        <div class="w-full flex justify-center">
+                            <textarea class="h-[70px] w-[90%] border-4 rounded-[15px] border-[#303196] font-bold pl-2 pt-2 text-2xl xl:text-[45px]"
+                                name="idea_title" placeholder="title"></textarea>
+                        </div>
+                        <div class="w-full flex justify-center">
+                            <textarea class="mt-4 h-[150px] w-[90%] border-4 rounded-[15px] border-[#303196] font-bold p-4 text-2xl xl:text-[40px] resize-none focus:outline-none placeholder:text-gray-400"
+                                name="idea_desc" placeholder="Enter your description"></textarea>
+                        </div>
+                        <div class="flex w-full justify-center">
+                            <button type="submit" id="publishButton" class="mt-4 w-[50%] h-[60px] rounded-xl bg-[#F17E34] text-4xl font-bold text-black shadow-xl">
+                                Publish
+                            </button>
+                        </div>
+                    </form>
                     </form>
 
                 </div>
             </div>
         </main>
+
+        <footer class=" w-full bg-[#EFEFEF]">
+            <!-- Верхний блок -->
+            <div class="h-[100px] w-full bg-[#EFEFEF] flex justify-center items-center">
+              <img src="{% static 'img/Group 77.png' %}" alt="Company Logo" class="h-[50px] sm:h-[80px]" />
+            </div>
+
+            <!-- Нижний блок -->
+            <div class="bg-[#DFE6FF] px-4 sm:px-10 md:px-20 py-8 grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 relative">
+              <div class="absolute bottom-0 right-0">
+                <a href="{% url 'main' %}" id="PSH" class="text-sm hove:underline text-[#DFE64F]">Пасхалка</a>
+              </div>
+              <!-- Компания -->
+              <div class="text-center">
+                <p class="text-2xl sm:text-3xl lg:text-4xl text-black font-bold">Company</p>
+                <div class="mt-4 text-[#303196] text-2xl sm:text-xl lg:text-3xl space-y-2">
+                  <a href="{% url 'about' %}" class="hover:underline block ">About</a>
+                  <a href="{% url 'news' %}" class="hover:underline block">News</a>
+                </div>
+              </div>
+
+              <!-- Соцсети -->
+              <div class="text-center">
+                <p class="text-2xl sm:text-3xl lg:text-4xl text-black font-bold">Social media</p>
+                <div class="mt-4 text-[#303196] text-2xl sm:text-xl lg:text-3xl space-y-2">
+                  <a href="https://vk.com/dumnkonechno" class="hover:underline block" >VK</a>
+                  <a href="https://t.me/Utinoelico" class="hover:underline block">Telegram</a>
+                  <a href="#" class="hover:underline block">Instagram</a>
+                </div>
+              </div>
+
+              <!-- Поддержка -->
+              <div class="text-center">
+                <p class="text-2xl sm:text-3xl lg:text-4xl text-black font-bold">Support</p>
+                <div class="mt-4 text-[#303196] text-2xl sm:text-xl lg:text-3xl space-y-2 ">
+                  <a href="tel:+79я004252642" class="hover:underline block">+7 (900) 425-26-42</a>
+                  <a href="mailto:muzychenko.yd@dvfu.ru" class="hover:underline block">muzychenko.yd@dvfu.ru</a>
+                  <a href="{% url 'faq' %}" class="hover:underline block">FAQ</a>
+                </div>
+              </div>
+            </div>
+    </footer>
     </div>
-<footer class="mt-[200px] w-full bg-[#EFEFEF]">
-        <!-- Верхний блок -->
-        <div class="h-[100px] w-full bg-[#EFEFEF] flex justify-center items-center">
-          <img src="{% static 'img/Group 77.png' %}" alt="Company Logo" class="h-[50px] sm:h-[80px]" />
-        </div>
-
-        <!-- Нижний блок -->
-        <div class="bg-[#DFE6FF] px-4 sm:px-10 md:px-20 py-8 grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 relative">
-          <div class="absolute bottom-0 right-0">
-            <a href="{% url 'main' %}" id="PSH" class="text-sm hove:underline text-[#DFE64F]">Пасхалка</a>
-          </div>
-          <!-- Компания -->
-          <div class="text-center">
-            <p class="text-2xl sm:text-3xl lg:text-4xl text-black font-bold">Company</p>
-            <div class="mt-4 text-[#303196] text-2xl sm:text-xl lg:text-3xl space-y-2">
-              <a href="#" class="hover:underline block ">About</a>
-              <a href="#" class="hover:underline block">News</a>
-              <a href="#" class="hover:underline block">FAQ</a>
-            </div>
-          </div>
-
-          <!-- Соцсети -->
-          <div class="text-center">
-            <p class="text-2xl sm:text-3xl lg:text-4xl text-black font-bold">Social media</p>
-            <div class="mt-4 text-[#303196] text-2xl sm:text-xl lg:text-3xl space-y-2">
-              <a href="https://vk.com/dumnkonechno" class="hover:underline block" >VK</a>
-              <a href="https://t.me/Utinoelico" class="hover:underline block">Telegram</a>
-              <a href="#" class="hover:underline block">Instagram</a>
-            </div>
-          </div>
-
-          <!-- Поддержка -->
-          <div class="text-center">
-            <p class="text-2xl sm:text-3xl lg:text-4xl text-black font-bold">Support</p>
-            <div class="mt-4 text-[#303196] text-2xl sm:text-xl lg:text-3xl space-y-2 ">
-              <a href="tel:+79004252642" class="hover:underline block">+7 (900) 425-26-42</a>
-              <a href="mailto:muzychenko.yd@dvfu.ru" class="hover:underline block">muzychenko.yd@dvfu.ru</a>
-              <a href="{% url 'faq' %}" class="hover:underline block">FAQ</a>
-            </div>
-          </div>
-        </div>
-      </footer>
 </body>
 </html>

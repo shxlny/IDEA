@@ -2,9 +2,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const nicknameField = document.querySelector('#nicknameField');
     const changeNicknameButton = document.querySelector('#changeNicknameButton');
 
+
+
     // Проверка подключения обработчика
     console.log("Script loaded and button ready.");
-
     // Обработчик кнопки
     changeNicknameButton.addEventListener('click', function () {
         const newNickname = nicknameField.value.trim(); // Получаем значение никнейма
@@ -37,6 +38,31 @@ document.addEventListener("DOMContentLoaded", function () {
             console.error('Error:', error);
         });
     });
+/// Высвечивание ачивки при публикации
+    const publishButton = document.getElementById("publishButton");
+    const modal = document.getElementById("popupModal");
+    const newbie = document.getElementById("Newbie")
+    const closeButton = document.getElementById("x-button");
+
+    let isModalShown = false;
+
+    if (publishButton) {
+        publishButton.addEventListener("click", (event) => {
+            if (!isModalShown) {
+                event.preventDefault();
+                modal.classList.remove("hidden");
+                newbie.classList.remove("hidden")
+                isModalShown = true;
+
+            }
+        });
+    }
+
+    if (closeButton) {
+        closeButton.addEventListener("click", () => {
+            modal.classList.add("hidden");
+        });
+    }
 });
 
 // Получение CSRF токена из cookie
@@ -54,3 +80,6 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+
+

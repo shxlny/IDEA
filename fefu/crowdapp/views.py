@@ -8,22 +8,30 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
-import json
+from .models import Idea
+
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['avatar', 'idea_title', 'idea_desc']
+        fields = ['avatar']  # Убираем удалённые поля
         widgets = {
-            'idea_title': forms.TextInput(attrs={
-                'placeholder': 'Enter idea title',
-                'class': 'form-control'
-            }),
-            'idea_desc': forms.Textarea(attrs={
-                'placeholder': 'Enter idea description',
+            'avatar': forms.ClearableFileInput(attrs={
                 'class': 'form-control'
             }),
         }
+
+
+class NicknameChangeForm(forms.Form):
+    nickname = forms.CharField(
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Enter new nickname',
+            'class': 'form-control'
+        })
+    )
+
 # Регистрация пользователя
 def user_signup(request):
     if request.method == 'POST':
@@ -114,72 +122,69 @@ def update_photo(request):
         return JsonResponse({'success': True})
     return JsonResponse({'success': False})
 
-def change_nickname(request):
-    try:
-        profile = request.user.profile  # Получаем профиль текущего пользователя
-    except Profile.DoesNotExist:
-        profile = None
-
-    if request.method == 'POST':
-        form = ChangeNicknameForm(request.POST, instance=profile)
-        if form.is_valid():
-            form.save()  # Сохраняем изменения
-            return redirect('profile')  # Перенаправляем на страницу профиля
-    else:
-        form = ChangeNicknameForm(instance=profile)
-
-    return render(request, 'profile/change_nickname.html', {'form': form})
-
-# Обновление профиля (включает никнейм и фото)
+# Account view: профайл + изменение никнейма
 @login_required
-def update_profile(request):
+def account_view(request):
     try:
         profile = request.user.profile
     except ObjectDoesNotExist:
         profile = Profile.objects.create(user=request.user)
 
-    # Если форма отправлена (POST запрос)
-    if request.method == 'POST':
-        form = ProfileForm(request.POST, request.FILES, instance=profile)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Profile updated successfully!")
-            return redirect('account')
-    else:
-        # Если форма не отправлена, то передаем форму для отображения
-        form = ProfileForm(instance=profile)
+    # Инициализация форм
+    nickname_form = NicknameChangeForm(initial={'nickname': request.user.username})
+    profile_form = ProfileForm(instance=profile)
 
+    if request.method == 'POST':
+        if 'avatar' in request.FILES:
+            # Обработка изменения аватарки
+            profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+            if profile_form.is_valid():
+                profile_form.save()
+                messages.success(request, "Avatar updated successfully!")
+                return redirect('account')
+        elif 'nickname' in request.POST:
+            # Обработка изменения никнейма
+            nickname_form = NicknameChangeForm(request.POST)
+            if nickname_form.is_valid():
+                new_nickname = nickname_form.cleaned_data['nickname']
+                request.user.username = new_nickname
+                request.user.save()
+                messages.success(request, "Nickname updated successfully!")
+                return redirect('account')
+
+    # Возвращаем формы в шаблон
     return render(request, 'account.html', {
-        'form': form,
-        'nickname': profile.nickname,  # Передаем никнейм в шаблон
+        'nickname_form': nickname_form,
+        'profile_form': profile_form,
+        'nickname': profile.nickname,
     })
 
-
+@login_required
 def add_idea(request):
     if request.method == 'POST':
-        idea_title = request.POST.get('idea_title')  # Получаем данные из формы
-        idea_desc = request.POST.get('idea_desc')
+        print("POST request received")  # Отладка
+        title = request.POST.get('idea_title')
+        description = request.POST.get('idea_desc')
 
-        # Получаем профиль текущего пользователя
-        profile = request.user.profile
+        print(f"Title: {title}, Description: {description}")  # Проверка полученных данных
 
-        # Если профиль существует, сохраняем идею
-        if profile:
-            profile.idea_title = idea_title
-            profile.idea_desc = idea_desc
-            profile.save()  # Сохраняем изменения в базе данных
-
-            return redirect('profile')  # Перенаправляем на страницу профиля или куда-то еще
+        if not title or not description:
+            messages.error(request, "Both title and description are required!")
+        else:
+            Idea.objects.create(
+                user=request.user,
+                title=title,
+                description=description
+            )
+            print("Idea saved successfully")  # Проверка сохранения
+            messages.success(request, "Your idea has been published!")
+            return redirect('account')
 
     return render(request, 'account.html')
 
-class ChangeNicknameForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ['nickname']
-        widgets = {
-            'nickname': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter new nickname'
-            })
-        }
+from django.shortcuts import render
+from .models import Idea
+
+def main_page(request):
+    ideas = Idea.objects.all()  # Получаем все идеи
+    return render(request, 'main.html', {'ideas': ideas})

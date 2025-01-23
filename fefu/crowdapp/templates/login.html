@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <script src="{% static 'js/login.js' %}"></script>
 </head>
-<body>
-    <div class="h-screen bg-[#EFEFEF]">
+<body class="h-auto bg-[#EFEFEF]">
+    <div class="h-auto bg-[#EFEFEF]">
         <header class="h-[15vh] w-full bg-[#EFEFEF] p-4 ">
           <div class="relative h-full flex lg:justify-center items-center space-x-10">
             <logo class="h-full flex items-center lg:justify-center">
@@ -24,31 +24,48 @@
                   </button>
                   <input type="text" placeholder="search" class="w-full bg-[#F17E34] placeholder-white text-white text-3xl pl-2 pr-10 pl-[15px] font-bold rounded-2xl">
               </div>
+
             </div>
             <nav class="hidden lg:grid grid-cols-5 w-full h-full items-center text-center text-[#303196] font-bold lg:text-2xl xl:text-4xl">
+              <a href="{% url 'main' %}" class="hover:underline">Home</a>
+              <a href="{% url 'about' %}" class=" hover:underline">About</a>
+              <a href="{% url 'news' %}" class=" hover:underline">News</a>
+              <a href="#PSH" class=" hover:underline">Contacts</a>
+              <a href="{% url 'login' %}" class=" flex justify-center underline" id="Login">Log in</a>
+              <!-- Account img -->
+              <div class=" hidden justify-center" id="photo">
+                <button class="rounded-full border-2 border-black w-[80px] h-[80px] flex items-center overflow-hidden">
+                  <img src="{% static 'img/IMG_3811 1.png' %}" alt="">
+                </button>
+              </div>
+              <!-- Account img -->
+            </nav>
+            <button class="absolute right-2 lg:hidden h-[50px] w-[50px]" onclick="main()">
+              <img src="{% static 'img/open-menu_4083576.png' %}" alt="">
+            </button>
+            <div id="Mobile" class="hidden grid grid-cols-5 gap-2 text-center font-bold text-[#303196] text-xl sm:text-2xl top-[80%] border-2 border-black rounded-2xl py-5 right-0 bg-[#EFEFEF] z-50 shadow-lg h-[80px] w-full absolute ">
               <a href="{% url 'main' %}" class=" hover:underline">Home</a>
               <a href="{% url 'about' %}" class=" hover:underline">About</a>
               <a href="{% url 'news' %}" class=" hover:underline">News</a>
-              <a href="#" class=" hover:underline">Contacts</a>
-              <a href="{% url 'login' %}" class="underline">Log in</a>
-            </nav>
+              <a href="#PSH" class=" hover:underline">Contacts</a>
+              <a href="{% url 'login' %}" class=" hover:underline">Log in</a>
+            </div>
           </div>
         </header>
-
-        <main class="px-4 sm:px-8 md:px-16 lg:px-[60px] pt-6 sm:pt-10 h-auto block">
-          <section class="min-h-[500px]">
-            <div class="grig h-full justify-center">
-              <p class="text-5xl text-[#303196] text-center font-bold">Welcome back!</p>
-              <div class="flex justify-center pt-10">
-                <div class="min-h-[600px] min-w-[400px] xl:min-w-[800px] border-4 border-[#303196] rounded-[77px] flex justify-center items-center">
-                  <div class="h-[550px] w-[95%] px-5 sm:px-20 border-4 border-[#303196] rounded-[56px] block">
+        <p class="text-5xl text-[#303196] text-center font-bold pt-4">Welcome back!</p>
+        <main class="h-[800px] px-4 sm:px-8 pt-6 sm:pt-10 h-auto block">
+          <section class="h-[90%]">
+            <div class=" h-full justify-center">
+              <div class="flex justify-center">
+                <div class="h-[100%] w-[95%] lg:w-[50%] border-4 border-[#303196] rounded-[77px] flex justify-center items-center p-4">
+                  <div class="p-2 sm:p-10 h-full w-full border-4 border-[#303196] rounded-[56px] block">
                     <div class="w-full text-5xl text-center text-black font-bold">
                       <p class="pt-10 pb-10">Log In</p>
                     </div>
-                    <form method="post" action="{% url 'login' %}" class="grid items-center">
+                    <form method="post" action="{% url 'login' %}" class="grid items-center w-full">
                       {% csrf_token %}
-                      <div class="grid gap-8 h-auto w-auto">
-                        <input type="text" name="nickname" class="w-auto h-[50px] sm:h-[80px] bg-[#B1C0E5] rounded-[26px] pl-5 font-bold text-3xl placeholder-[#6C6DCC]" placeholder="Nickname" required>
+                      <div class="grid gap-8 h-auto w-full">
+                        <input type="text" name="nickname" class="w-full h-[50px] sm:h-[80px] bg-[#B1C0E5] rounded-[26px] pl-5 font-bold text-3xl placeholder-[#6C6DCC]" placeholder="Nickname" required>
                         <input type="password" name="password" class="w-full h-[50px] sm:h-[80px] bg-[#B1C0E5] rounded-[26px] pl-5 font-bold text-3xl placeholder-[#6C6DCC]" placeholder="Password" required>
                         <div class="flex justify-center">
                           <button type="submit" class="border-4 border-[#303196] sm:w-[360px] w-[180px] h-[60px] sm:h-[90px] text-3xl font-bold rounded-[26px] flex items-center justify-center">
@@ -68,6 +85,47 @@
             </div>
           </section>
         </main>
+        <footer class=" w-full bg-[#EFEFEF]">
+            <!-- Верхний блок -->
+            <div class="h-[100px] w-full bg-[#EFEFEF] flex justify-center items-center">
+              <img src="{% static 'img/Group 77.png' %}" alt="Company Logo" class="h-[50px] sm:h-[80px]" />
+            </div>
+
+            <!-- Нижний блок -->
+            <div class="bg-[#DFE6FF] px-4 sm:px-10 md:px-20 py-8 grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 relative">
+              <div class="absolute bottom-0 right-0">
+                <a href="{% url 'main' %}" id="PSH" class="text-sm hove:underline text-[#DFE64F]">Пасхалка</a>
+              </div>
+              <!-- Компания -->
+              <div class="text-center">
+                <p class="text-2xl sm:text-3xl lg:text-4xl text-black font-bold">Company</p>
+                <div class="mt-4 text-[#303196] text-2xl sm:text-xl lg:text-3xl space-y-2">
+                  <a href="{% url 'about' %}" class="hover:underline block ">About</a>
+                  <a href="{% url 'news' %}" class="hover:underline block">News</a>
+                </div>
+              </div>
+
+              <!-- Соцсети -->
+              <div class="text-center">
+                <p class="text-2xl sm:text-3xl lg:text-4xl text-black font-bold">Social media</p>
+                <div class="mt-4 text-[#303196] text-2xl sm:text-xl lg:text-3xl space-y-2">
+                  <a href="https://vk.com/dumnkonechno" class="hover:underline block" >VK</a>
+                  <a href="https://t.me/Utinoelico" class="hover:underline block">Telegram</a>
+                  <a href="#" class="hover:underline block">Instagram</a>
+                </div>
+              </div>
+
+              <!-- Поддержка -->
+              <div class="text-center">
+                <p class="text-2xl sm:text-3xl lg:text-4xl text-black font-bold">Support</p>
+                <div class="mt-4 text-[#303196] text-2xl sm:text-xl lg:text-3xl space-y-2 ">
+                  <a href="tel:+79004252642" class="hover:underline block">+7 (900) 425-26-42</a>
+                  <a href="mailto:muzychenko.yd@dvfu.ru" class="hover:underline block">muzychenko.yd@dvfu.ru</a>
+                  <a href="{% url 'faq' %}" class="hover:underline block">FAQ</a>
+                </div>
+              </div>
+            </div>
+        </footer>
     </div>
 </body>
 </html>
