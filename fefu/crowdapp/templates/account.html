@@ -10,7 +10,7 @@
 </head>
 <body class="h-auto bg-[#EFEFEF]">
     <div class="h-auto bg-[#EFEFEF]">
-        <header class="h-[15vh] w-full bg-[#EFEFEF] p-4">
+         <header class="h-[15vh] w-full bg-[#EFEFEF] p-4">
             <div class="relative h-full flex lg:justify-center items-center space-x-10">
                 <logo class="h-full flex items-center lg:justify-center">
                     <div class="w-[150px] md:w-[200px]">
@@ -51,91 +51,60 @@
 
         <main class="flex justify-center w-full h-auto">
             <div class="w-[80%] xl:w-[50%] h-[90%] border-4 rounded-[30px] xl:rounded-[40px] border-[#303196] flex justify-center items-center p-2  ">
-                <div class="w-full h-full border-4 rounded-[25px] border-[#303196]  justify-center relative p-4">
-                    <div class="w-full h-auto flex justify-center ">
-                            <div class="w-[90%] h-auto sm:flex justify-center py-4 sm:py-[30px] sm:gap-6">
-                                <div class="flex flex-col items-start ">
-                                    <div class="w-full flex justify-center">
-                                        <div class="w-[150px] h-[150px] md:w-[200px] md:h-[200px]  bg-white border-4 rounded-[15px] border-[#303196] overflow-hidden">
-                                            <img class="h-auto w-auto" src="{% static 'img/IMG_3813 1.png' %}" alt="">
-                                        </div>
-                                    </div>
-                                    <div class="w-full flex justify-center">
-                                        <button id="changePhotoButton"
-                                            class="mt-4 w-[80%] h-[40px] bg-[#F17E34] rounded-xl shadow-xl font-bold text-black text-xl md:text-2xl">
-                                        Change Photo
-                                        </button>
-                                    </div>
-                                </div>
-                                <div class="w-full h-auto justify-center lg:pl-10">
-                                    <div class="pt-4 sm:pt-0 w-full flex flex-col justify-start items-center">
-                                        <div class="w-full h-[60px] bg-white border-4 rounded-[15px] border-[#303196] flex items-center justify-center">
-                                            <input id="nicknameField"
-                                                   class="text-[30px] md:text-[55px]  font-bold text-[#303196] text-center w-[300px] outline-none bg-transparent"
-                                                   type="text"
-                                                   value="{{ nickname }}"
-                                            />
-
-                                        </div>
-                                        <button id="changeNicknameButton"
-                                                class="mt-4 w-[80%] h-[40px] bg-[#F17E34] rounded-xl shadow-xl font-bold text-black text-xl md:text-2xl">
-                                            Change Nickname
-                                        </button>
-                                        <div class="w-full h-full pt-8 flex justify-center">
-                                            <img id="Newbie" src="{% static 'img/newbie.png' %}" class="hidden h-[64px] w-[64px] hover:scale-150 transition ease-in-out " />
-                                            <img src="{% static 'img/kritik.png' %}" class="hidden h-[64px] w-[64px] hover:scale-150 transition ease-in-out" />
-                                            <img src="{% static 'img/marathon.png' %}" class="hidden h-[64px] w-[64px] hover:scale-150 transition ease-in-out" />
-                                            <img src="{% static 'img/talker.png' %}" class="hidden h-[64px] w-[64px] hover:scale-150 transition ease-in-out" />
-                                            <img src="{% static 'img/stariy.png' %}" class="hidden h-[64px] w-[64px] hover:scale-150 transition ease-in-out" />
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                    </div>
+                <div class="w-full h-full border-4 rounded-[25px] border-[#303196] justify-center relative p-4">
+                    <!-- Блок профиля -->
                     <div class="w-full h-auto flex justify-center">
-                        <div class="w-full  justify-center">
-                            <form method="post">
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="w-[150px] h-[150px] md:w-[200px] md:h-[200px] bg-white border-4 rounded-[15px] border-[#303196] overflow-hidden">
+                                {% if user.profile.avatar %}
+                                    <img src="{{ user.profile.avatar.url }}" alt="Current Avatar">
+                                {% else %}
+                                    <img src="/media/avatars/default.png" alt="Default Avatar">
+                                {% endif %}
+                            </div>
+                            <form id="photoForm" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
-                                <dic class="h-fit w-full">
-                                    <div class="w-full flex justify-center">
-                                        <textarea class="h-[70px] w-[90%] border-4 rounded-[15px] border-[#303196] font-bold pl-2 pt-2 text-2xl xl:text-[45px]"
-                                          name="idea_title" placeholder="title">{{ idea_title }}</textarea>
-                                    </div>
-                                    <div class="w-full flex justify-center">
-                                        <textarea class="mt-4 h-[150px]  w-[90%] border-4 rounded-[15px] border-[#303196] font-bold p-4 text-2xl xl:text-[40px] resize-none focus:outline-none placeholder:text-gray-400"
-                                          name="idea_desc" placeholder="Enter your description">{{ idea_desc }}</textarea>
-                                    </div>
-
-                                    <div class="flex w-full justify-center">
-                                        <button type="submit" id="publishButton" class="mt-4 w-[50%] h-[60px]  rounded-xl  bg-[#F17E34] text-4xl font-bold text-black shadow-xl">
-                                            Publish
-                                        </button>
-                                    </div>
-                                </dic>
+                                <input id="avatarInput" type="file" name="avatar" class="hidden" onchange="this.form.submit();">
+                                <button type="button" id="changePhotoButton"
+                                    class="mt-4 w-[80%] h-[40px] bg-[#F17E34] rounded-xl shadow-xl font-bold text-black text-xl md:text-2xl"
+                                    onclick="document.getElementById('avatarInput').click();">
+                                    Change Photo
+                                </button>
                             </form>
-                        </div>
+                            <!-- Форма изменения никнейма -->
+                            <div class="w-full pt-4 flex flex-col justify-center items-center">
+                                <input type="text" name="nickname" class="text-[30px] md:text-[55px] font-bold text-[#303196] text-center w-[300px] outline-none bg-white border-4 rounded-[15px] border-[#303196]" value="{{ form.nickname.value|default:user.username }}">
+                                <button type="submit" class="mt-4 w-[80%] h-[40px] bg-[#F17E34] rounded-xl shadow-xl font-bold text-black text-xl md:text-2xl">
+                                    Change Nickname
+                                </button>
+                            </div>
+                        </form>
                     </div>
+
+                    <!-- Блок для добавления идей -->
+                    <form method="POST" action="{% url 'add_idea' %}" class="w-full">
+                        {% csrf_token %}
+                        <div class="w-full flex justify-center">
+                            <textarea class="h-[70px] w-[90%] border-4 rounded-[15px] border-[#303196] font-bold pl-2 pt-2 text-2xl xl:text-[45px]"
+                                name="idea_title" placeholder="title"></textarea>
+                        </div>
+                        <div class="w-full flex justify-center">
+                            <textarea class="mt-4 h-[150px] w-[90%] border-4 rounded-[15px] border-[#303196] font-bold p-4 text-2xl xl:text-[40px] resize-none focus:outline-none placeholder:text-gray-400"
+                                name="idea_desc" placeholder="Enter your description"></textarea>
+                        </div>
+                        <div class="flex w-full justify-center">
+                            <button type="submit" id="publishButton" class="mt-4 w-[50%] h-[60px] rounded-xl bg-[#F17E34] text-4xl font-bold text-black shadow-xl">
+                                Publish
+                            </button>
+                        </div>
+                    </form>
+                    </form>
+
                 </div>
             </div>
         </main>
-        <div id="popupModal" class="hidden fixed top-0 flex left-0 w-full h-full bg-black bg-opacity-50 items-start justify-center z-50">
-            <div class="border-4 border-[#F17E34] fixed flex items-center top-[120px] bg-white w-[90%] sm:w-[60%] xl:w-[40%] h-fit p-2 rounded-[15px] shadow-lg">
-                <div class="flex h-fit items-center border-4 border-[#303196] rounded-[8px]">
-                    <img src="{% static 'img/Новичок.png' %}" class="h-[64px] w-[64px] sm:w-[128px]  sm:h-[128px]" />
-                </div>
-                <div class="flex items-center pl-4">
-                    <h1 class="text-[18px] lg:text-[30px] 2xl:text-[38px] font-bold">
-                        Action: Share your first idea.
-                        <br>Reward: Newbie Badge.
-                    </h1>
-                </div>
-                <button id="x-button" class="top-0 right-2 absolute text-2xl sm:text-4xl font-bold">
-                    x
-                </button>
-            </div>
-        </div>
+
         <footer class=" w-full bg-[#EFEFEF]">
             <!-- Верхний блок -->
             <div class="h-[100px] w-full bg-[#EFEFEF] flex justify-center items-center">
@@ -170,13 +139,13 @@
               <div class="text-center">
                 <p class="text-2xl sm:text-3xl lg:text-4xl text-black font-bold">Support</p>
                 <div class="mt-4 text-[#303196] text-2xl sm:text-xl lg:text-3xl space-y-2 ">
-                  <a href="tel:+79004252642" class="hover:underline block">+7 (900) 425-26-42</a>
+                  <a href="tel:+79я004252642" class="hover:underline block">+7 (900) 425-26-42</a>
                   <a href="mailto:muzychenko.yd@dvfu.ru" class="hover:underline block">muzychenko.yd@dvfu.ru</a>
                   <a href="{% url 'faq' %}" class="hover:underline block">FAQ</a>
                 </div>
               </div>
             </div>
-        </footer>
+    </footer>
     </div>
 </body>
 </html>

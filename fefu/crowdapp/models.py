@@ -6,9 +6,14 @@ class Profile(models.Model):
     nickname = models.CharField(max_length=100, blank=True, null=True)  # Поле для никнейма
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)  # Поле для аватара
 
-    # Поля для идеи
-    idea_title = models.CharField(max_length=255, blank=True, null=True)  # Название идеи
-    idea_desc = models.TextField(blank=True, null=True)  # Описание идеи
-
     def __str__(self):
         return self.nickname or self.user.username  # Возвращает nickname, если он есть, иначе username
+
+class Idea(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='ideas')  # Связь с пользователем
+    title = models.CharField(max_length=255)  # Название идеи
+    description = models.TextField()  # Описание идеи
+    created_at = models.DateTimeField(auto_now_add=True)  # Дата создания
+
+    def __str__(self):
+        return self.title
