@@ -100,6 +100,16 @@
                             <textarea class="mt-4 h-[150px] w-[90%] border-4 rounded-[15px] border-[#303196] font-bold p-4 text-2xl xl:text-[40px] resize-none focus:outline-none placeholder:text-gray-400"
                                 name="idea_desc" placeholder="Enter your description"></textarea>
                         </div>
+                        <div class="w-full flex justify-center mt-4">
+                            <select name="idea_category" class="h-[60px] w-[90%] border-4 rounded-[15px] border-[#303196] font-bold text-2xl xl:text-[40px] p-2 focus:outline-none">
+                                <option value="" disabled selected>Select a category</option>
+                                <option value="Computer science" class="font-bold">Computer science</option>
+                                <option value="technology" class="font-bold">Technology</option>
+                                <option value="science" class="font-bold">Science</option>
+                                <option value="business" class="font-bold">Business</option>
+                                <option value="art" class="font-bold">Art</option>
+                            </select>
+                        </div>
                         <div class="flex w-full justify-center">
                             <button type="submit" id="publishButton" class="mt-4 w-[50%] h-[60px] rounded-xl bg-[#F17E34] text-4xl font-bold text-black shadow-xl">
                                 Publish
