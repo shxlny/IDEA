@@ -63,12 +63,15 @@
                     </div>
                     <form method="post" action="{% url 'register' %}" class="grid items-center w-full">
                       {% csrf_token %}
-                      <div class="grid gap-8 h-auto w-full">
+                      <div class="grid gap-6 h-auto w-full">
                         <input type="text" name="nickname" class="w-full h-[50px] sm:h-[80px] bg-[#B1C0E5] rounded-[26px] pl-5 font-bold text-3xl placeholder-[#6C6DCC]" placeholder="nickname" required>
                         <input type="email" name="email" class="w-full h-[50px] sm:h-[80px] bg-[#B1C0E5] rounded-[26px] pl-5 font-bold text-3xl placeholder-[#6C6DCC]" placeholder="email" required>
-                        <input type="password" name="password" class="w-full h-[50px] sm:h-[80px] bg-[#B1C0E5] rounded-[26px] pl-5 font-bold text-3xl placeholder-[#6C6DCC]" placeholder="password" required>
-                        <input type="password" name="repeat_password" class="w-full h-[50px] sm:h-[60px] bg-[#B1C0E5] rounded-[26px] pl-5 font-bold text-3xl placeholder-[#6C6DCC]" placeholder="repeat password" required>
-                        <div class="flex justify-center">
+                        <input id="password" type="password" name="password" class="w-full h-[50px] sm:h-[80px] bg-[#B1C0E5] rounded-[26px] pl-5 font-bold text-3xl placeholder-[#6C6DCC]" placeholder="password" required>
+                        <input id="password_rep" type="password" name="repeat_password" class="w-full h-[50px] sm:h-[80px] bg-[#B1C0E5] rounded-[26px] pl-5 font-bold text-3xl placeholder-[#6C6DCC]" placeholder="repeat password" required>
+                          <div id="passwordError" class="hidden w-full flex justify-center">
+                              <span class="text-red-600 text-[14px] sm:text-[20px] xl:text-[28px] font-bold">Password must be at least 8 characters long!</span>
+                          </div>
+                          <div id="ContinueButton" class="flex justify-center">
                           <button type="submit" class="border-4 border-[#303196] sm:w-[360px] w-[180px] h-[60px] sm:h-[90px] text-3xl font-bold rounded-[26px] flex items-center justify-center">
                             Continue
                           </button>
