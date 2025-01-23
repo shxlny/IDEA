@@ -13,10 +13,9 @@ urlpatterns = [
     path('news/', views.news_page, name='news'),
     path('about/', views.about_page, name='about'),
     path('faq/', views.faq_page, name='faq'),
-    path('account/', views.update_profile, name='account'),
+    path('account/', views.account_view, name='account'),  # Теперь использует account_view
     path('update-photo/', views.update_photo, name='update_photo'),
-    path('change_nickname/', views.change_nickname, name='change_nickname'),
-    path('add_idea/', views.add_idea, name='add_idea'),
+    path('add-idea/', views.add_idea, name='add_idea'),
 ]
 
 if settings.DEBUG:
