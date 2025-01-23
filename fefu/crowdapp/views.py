@@ -181,3 +181,10 @@ def add_idea(request):
             return redirect('account')
 
     return render(request, 'account.html')
+
+from django.shortcuts import render
+from .models import Idea
+
+def main_page(request):
+    ideas = Idea.objects.all()  # Получаем все идеи
+    return render(request, 'main.html', {'ideas': ideas})

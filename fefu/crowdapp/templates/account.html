@@ -73,12 +73,20 @@
                                 </button>
                             </form>
                             <!-- Форма изменения никнейма -->
-                            <div class="w-full pt-4 flex flex-col justify-center items-center">
-                                <input type="text" name="nickname" class="text-[30px] md:text-[55px] font-bold text-[#303196] text-center w-[300px] outline-none bg-white border-4 rounded-[15px] border-[#303196]" value="{{ form.nickname.value|default:user.username }}">
-                                <button type="submit" class="mt-4 w-[80%] h-[40px] bg-[#F17E34] rounded-xl shadow-xl font-bold text-black text-xl md:text-2xl">
-                                    Change Nickname
-                                </button>
-                            </div>
+                            <form method="POST" class="w-full">
+                                {% csrf_token %}
+                                <div class="w-full pt-4 flex flex-col justify-center items-center">
+                                    <!-- Используем ваше поле ввода для никнейма, передавая данные через форму -->
+                                    <input type="text" name="nickname" class="text-[30px] md:text-[55px] font-bold text-[#303196] text-center w-[300px] outline-none bg-white border-4 rounded-[15px] border-[#303196]"
+                                        value="{{ nickname_form.nickname.value|default:user.username }}">
+
+                                    <!-- Кнопка отправки формы -->
+                                    <button type="submit" class="mt-4 w-[80%] h-[40px] bg-[#F17E34] rounded-xl shadow-xl font-bold text-black text-xl md:text-2xl">
+                                        Change Nickname
+                                    </button>
+                                </div>
+                            </form>
+
                         </form>
                     </div>
 

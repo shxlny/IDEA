@@ -88,37 +88,41 @@
               <div class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold pl-4 sm:pl-8 md:pl-[50px] mb-6 sm:mb-10">
                 Popular ideas
               </div>
-              <div class="grid grid-rows-5 gap-6 sm:gap-8 md:gap-10">
-                <!-- Card -->
-                <div class="p-4 sm:p-5 min-h-[120px] rounded-[20px] sm:rounded-[50px] bg-[#F17E34] grid sm:gap-4">
-                  <!-- Top Section -->
-                  <div class="flex items-start h-auto">
-                    <div class="hidden sm:flex h-[60px] w-[80px] bg-white rounded-2xl border-2 border-black overflow-hidden">
-                      <img src="{% static 'img/IMG_3811 1.png' %}" class="h-full w-full object-cover" alt="Idea Icon" />
-                    </div>
-                    <div class="grid grid-rows-2 min-w-[80px]    sm:pl-4 sm:pl-5 justify-start">
-                      <a
-                        href="#"
-                        class="text-white text-base sm:text-2xl md:text-4xl text-start sm:text-center hover:underline">
-                        Header
-                      </a>
-                      <div class="flex items-end">
-                        <img src="{% static 'img/Star 7.svg' %}" alt="Star Icon" class="h-4 sm:h-8" />
-                        <p
-                          class="h-full text-[#EFC4A8] text-sm sm:text-2xl pl-2 flex items-end">
-                          4.91
-                        </p>
+              <div class="space-y-4">
+                  {% for idea in ideas %}
+                  <div class="p-4 sm:p-5 min-h-[120px] rounded-[20px] sm:rounded-[50px] bg-[#F17E34] grid sm:gap-4">
+                      <!-- Top Section -->
+                      <div class="flex items-start h-auto">
+                          <div class="hidden sm:flex h-[60px] w-[80px] bg-white rounded-2xl border-2 border-black overflow-hidden">
+                              <img src="{{ idea.user.profile.avatar.url|default:'/media/avatars/default.png' }}"
+                                   class="h-full w-full object-cover" alt="Idea Icon" />
+                          </div>
+                          <div class="grid grid-rows-2 min-w-[80px] sm:pl-4 sm:pl-5 justify-start">
+                              <a href="#"
+                                 class="text-white text-base sm:text-2xl md:text-4xl text-start sm:text-center hover:underline">
+                                  {{ idea.title }}
+                              </a>
+                              <div class="flex items-end">
+                                  <img src="{% static 'img/Star 7.svg' %}" alt="Star Icon" class="h-4 sm:h-8" />
+                                  <p class="h-full text-[#EFC4A8] text-sm sm:text-2xl pl-2 flex items-end">
+                                      4.91 <!-- Здесь можно подставить рейтинг -->
+                                  </p>
+                              </div>
+                          </div>
+                          <div class="text-end w-full pr-4 sm:pr-10 text-sm sm:text-xl md:text-3xl text-[#303196] font-bold">
+                              <p>Computer science</p> <!-- Или категория идеи -->
+                          </div>
                       </div>
-                    </div>
-                    <div class="text-end w-full pr-4 sm:pr-10 text-sm sm:text-xl md:text-3xl text-[#303196] font-bold">
-                      <p>Computer science</p>
-                    </div>
+                      <!-- Description Section -->
+                      <div class="pb-2 text-sm sm:text-lg md:text-2xl text-black font-bold">
+                          <p>{{ idea.description }}</p>
+                      </div>
                   </div>
-                  <!-- Description Section -->
-                  <div class="pb-2 text-sm sm:text-lg md:text-2xl text-black font-bold">
-                    <p>Description</p>
-                  </div>
-                </div>
+                  {% empty %}
+                  <p class="text-center text-xl text-gray-500">No ideas found.</p>
+                  {% endfor %}
+              </div>
+
                 
                 
               
