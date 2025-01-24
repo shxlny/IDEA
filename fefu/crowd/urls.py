@@ -18,6 +18,7 @@ urlpatterns = [
     path('add-idea/', views.add_idea, name='add_idea'),
     path('like/<int:idea_id>/', views.like_idea, name='like_idea'),
     path('dislike/<int:idea_id>/', views.dislike_idea, name='dislike_idea'),
+    path('idea/<int:idea_id>/comments/', views.idea_comments, name='idea_comments'),
 
 ]
 

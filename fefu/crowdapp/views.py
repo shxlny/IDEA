@@ -236,4 +236,6 @@ def dislike_idea(request, idea_id):
             return JsonResponse({"success": False, "error": str(e)})
     return JsonResponse({"success": False, "error": "Invalid request or not authenticated."})
 
-
+def idea_comments(request, idea_id):
+    idea = get_object_or_404(Idea, id=idea_id)
+    return render(request, 'idea_comments.html', {'idea': idea})

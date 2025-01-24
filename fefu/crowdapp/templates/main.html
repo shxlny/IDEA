@@ -37,7 +37,7 @@
               <!-- Account img -->
               <div class=" flex justify-center" id="photo">
                 <button class="rounded-full border-2 border-black w-[80px] h-[80px] flex items-center overflow-hidden" onclick="acc()">
-                  <img src="{% static 'img/IMG_3811 1.png' %}" alt="">
+                  <img src="{{ idea.user.profile.avatar.url|default:'/media/avatars/default.png' }}" alt="Idea Icon">
                 </button>
               </div>
               <!-- Account img -->
@@ -187,9 +187,11 @@
                             </div>
                             <div class="w-full  flex justify-end items-center">
                                 <div class="flex h-full items-center border-4 shadow-[30px] border-[#F17E34] rounded-[15px]">
-                                    <button class="flex h-full items-center w-[32px] h-[32px]  sm:w-[64px] sm:h-[64px]" onclick="to_com">
+                                    <button class="flex h-full items-center w-[32px] h-[32px] sm:w-[64px] sm:h-[64px]"
+                                            onclick="window.location.href='{% url 'idea_comments' idea.id %}'">
                                         <img src="{% static 'img/talker.png' %}" class="comment-btn">
                                     </button>
+
                                     <p class="p-2 font-bold text-black text-[16px] sm:text-[20px]">Comments</p>
                                 </div>
                             </div>
