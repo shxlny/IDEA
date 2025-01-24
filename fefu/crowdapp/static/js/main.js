@@ -8,6 +8,6 @@ function acc(){
     menu.classList.toggle("hidden");
 }
 
-// function main(){
-//     window.location.href = 'account.html';
-// }
+function to_com(  ){
+    window.location.href = "{% url 'Comments' %}";
+}
