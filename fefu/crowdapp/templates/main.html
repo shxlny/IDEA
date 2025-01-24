@@ -7,8 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <script src="{% static 'js/main.js' %}"></script>
-    
-   
+
+
 </head>
 <body>
     <div class="bg-[#EFEFEF] grid">
@@ -26,7 +26,7 @@
                   </button>
                   <input type="text" placeholder="search" class="w-full bg-[#F17E34] placeholder-white text-white text-3xl pl-2 pr-10 pl-[15px] font-bold rounded-2xl">
               </div>
-                  
+
             </div>
             <nav class="hidden lg:grid grid-cols-5 w-full h-full items-center text-center text-[#303196] font-bold lg:text-2xl xl:text-4xl">
               <a href="{% url 'main' %}" class="underline">Home</a>
@@ -45,18 +45,18 @@
             <button class="absolute right-2 lg:hidden h-[50px] w-[50px]" onclick="main()">
               <img src="{% static 'img/open-menu_4083576.png' %}" alt="">
             </button>
-            <div id="acc" class="hidden right-20 grid grid-cols-2 gap-2 text-center font-bold text-[#303196] text-xl sm:text-2xl top-[80%] border-2 border-black rounded-2xl py-5 right-0 bg-[#EFEFEF] z-50 shadow-lg h-[80px] w-[300px] absolute "> 
+            <div id="acc" class="hidden right-20 grid grid-cols-2 gap-2 text-center font-bold text-[#303196] text-xl sm:text-2xl top-[80%] border-2 border-black rounded-2xl py-5 right-0 bg-[#EFEFEF] z-50 shadow-lg h-[80px] w-[300px] absolute ">
               <a href="{% url 'account' %}" class=" hover:underline">Account</a>
               <a href="{% url 'login' %}" class=" hover:underline">Log out</a>
-            </div> 
+            </div>
 
-            <div id="Mobile" class="hidden lg:hidden grid grid-cols-5 gap-2 text-center font-bold text-[#303196] text-xl sm:text-2xl top-[80%] border-2 border-black rounded-2xl py-5 right-0 bg-[#EFEFEF] z-50 shadow-lg h-[80px] w-full absolute "> 
+            <div id="Mobile" class="hidden lg:hidden grid grid-cols-5 gap-2 text-center font-bold text-[#303196] text-xl sm:text-2xl top-[80%] border-2 border-black rounded-2xl py-5 right-0 bg-[#EFEFEF] z-50 shadow-lg h-[80px] w-full absolute ">
               <a href="{% url 'account' %}" class=" hover:underline">Account</a>
               <a href="{% url 'about' %}" class=" hover:underline">About</a>
               <a href="{% url 'news' %}" class=" hover:underline">News</a>
               <a href="#PSH" class=" hover:underline">Contacts</a>
               <a href="{% url 'login' %}" class=" hover:underline">Log out</a>
-            </div>  
+            </div>
           </div>
         </header>
 
@@ -67,65 +67,138 @@
                 Popular topics
               </div>
               <div class="mt-6 sm:mt-8 mb-8 p-4 min-h-[100px] border-4 rounded-[20px] sm:rounded-[50px] border-[#F17E34]">
-                <div class="h-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 lg:gap-10">
-                  <!-- Topic Button -->
-                  <button class="p-3 grid sm:grid-rows-2 border-4 rounded-[20px] sm:rounded-[30px] border-[#F17E34] items-center">
-                    <a
-                      href="#"
-                      class="text-[#303196] font-bold text-sm sm:text-base md:text-xl text-center hover:underline" >
-                      Computer science
-                    </a>
-                    <div class="hidden sm:flex w-full h-[40px] sm:h-[50px] justify-center">
-                      <img src="{% static 'img/compsc.svg' %}" alt="Computer Science Icon" />
-                    </div>
-                  </button>
-                </div>
-              </div>
+            <div class="h-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 lg:gap-10">
+                <!-- Button for All -->
+                <form method="GET">
+                    <button name="category" value="" class="w-[150px] h-[150px] p-3 grid sm:grid-rows-2 border-4 rounded-[20px] sm:rounded-[30px] border-[#F17E34] items-center hover:bg-orange-100">
+                        <div class="text-[#303196] font-bold text-sm sm:text-base md:text-xl text-center hover:underline">
+                            All
+                        </div>
+                        <div class="sm:flex w-full h-[40px] sm:h-[50px] justify-center">
+                            <img src="{% static 'img/compsc.svg' %}" alt="Icon">
+                        </div>
+                    </button>
+                </form>
+
+                <!-- Button for Computer Science -->
+                <form method="GET">
+                    <button name="category" value="Computer science" class="w-[150px] h-[150px] p-3 grid sm:grid-rows-2 border-4 rounded-[20px] sm:rounded-[30px] border-[#F17E34] items-center hover:bg-orange-100">
+                        <div class="text-[#303196] font-bold text-sm sm:text-base md:text-xl text-center hover:underline">
+                            Computer science
+                        </div>
+                        <div class="sm:flex w-full h-[40px] sm:h-[50px] justify-center">
+                            <img src="{% static 'img/compsc.svg' %}" alt="Icon">
+                        </div>
+                    </button>
+                </form>
+
+                <!-- Button for Technology -->
+                <form method="GET">
+                    <button name="category" value="Technology" class="w-[150px] h-[150px] p-3 grid sm:grid-rows-2 border-4 rounded-[20px] sm:rounded-[30px] border-[#F17E34] items-center hover:bg-orange-100">
+                        <div class="text-[#303196] font-bold text-sm sm:text-base md:text-xl text-center hover:underline">
+                            Technology
+                        </div>
+                        <div class="sm:flex w-full h-[40px] sm:h-[50px] justify-center">
+                            <img src="{% static 'img/compsc.svg' %}" alt="Icon">
+                        </div>
+                    </button>
+                </form>
+
+                <!-- Similar buttons for other categories -->
+                <form method="GET">
+                    <button name="category" value="Science" class="w-[150px] h-[150px] p-3 grid sm:grid-rows-2 border-4 rounded-[20px] sm:rounded-[30px] border-[#F17E34] items-center hover:bg-orange-100">
+                        <div class="text-[#303196] font-bold text-sm sm:text-base md:text-xl text-center hover:underline">
+                            Science
+                        </div>
+                        <div class="sm:flex w-full h-[40px] sm:h-[50px] justify-center">
+                            <img src="{% static 'img/compsc.svg' %}" alt="Icon">
+                        </div>
+                    </button>
+                </form>
+
+                <form method="GET">
+                    <button name="category" value="Business" class="w-[150px] h-[150px] p-3 grid sm:grid-rows-2 border-4 rounded-[20px] sm:rounded-[30px] border-[#F17E34] items-center hover:bg-orange-100">
+                        <div class="text-[#303196] font-bold text-sm sm:text-base md:text-xl text-center hover:underline">
+                            Business
+                        </div>
+                        <div class="sm:flex w-full h-[40px] sm:h-[50px] justify-center">
+                            <img src="{% static 'img/compsc.svg' %}" alt="Icon">
+                        </div>
+                    </button>
+                </form>
+
+                <form method="GET">
+                    <button name="category" value="Art" class="w-[150px] h-[150px] p-3 grid sm:grid-rows-2 border-4 rounded-[20px] sm:rounded-[30px] border-[#F17E34] items-center hover:bg-orange-100">
+                        <div class="text-[#303196] font-bold text-sm sm:text-base md:text-xl text-center hover:underline">
+                            Art
+                        </div>
+                        <div class="sm:flex w-full h-[40px] sm:h-[50px] justify-center">
+                            <img src="{% static 'img/compsc.svg' %}" alt="Icon">
+                        </div>
+                    </button>
+                </form>
+            </div>
+        </div>
+
             </section>
-          
+
             <!-- Popular Ideas Section -->
             <section class="h-auto">
               <div class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold pl-4 sm:pl-8 md:pl-[50px] mb-6 sm:mb-10">
-                Popular ideas
-              </div>
-              <div class="space-y-4">
-                  {% for idea in ideas %}
-                  <div class="p-4 sm:p-5 min-h-[120px] rounded-[20px] sm:rounded-[50px] bg-[#F17E34] grid sm:gap-4">
-                      <!-- Top Section -->
-                      <div class="flex items-start h-auto">
-                          <div class="hidden sm:flex h-[60px] w-[80px] bg-white rounded-2xl border-2 border-black overflow-hidden">
-                              <img src="{{ idea.user.profile.avatar.url|default:'/media/avatars/default.png' }}"
-                                   class="h-full w-full object-cover" alt="Idea Icon" />
-                          </div>
-                          <div class="grid grid-rows-2 min-w-[80px] sm:pl-4 sm:pl-5 justify-start">
-                              <a href="#"
-                                 class="text-white text-base sm:text-2xl md:text-4xl text-start sm:text-center hover:underline">
-                                  {{ idea.title }}
-                              </a>
-                              <div class="flex items-end">
-                                  <img src="{% static 'img/Star 7.svg' %}" alt="Star Icon" class="h-4 sm:h-8" />
-                                  <p class="h-full text-[#EFC4A8] text-sm sm:text-2xl pl-2 flex items-end">
-                                      4.91 <!-- Здесь можно подставить рейтинг -->
-                                  </p>
-                              </div>
-                          </div>
-                          <div class="text-end w-full pr-4 sm:pr-10 text-sm sm:text-xl md:text-3xl text-[#303196] font-bold">
-                              <p>Computer science</p> <!-- Или категория идеи -->
-                          </div>
-                      </div>
-                      <!-- Description Section -->
-                      <div class="pb-2 text-sm sm:text-lg md:text-2xl text-black font-bold">
-                          <p>{{ idea.description }}</p>
-                      </div>
-                  </div>
-                  {% empty %}
-                  <p class="text-center text-xl text-gray-500">No ideas found.</p>
-                  {% endfor %}
-              </div>
+    Popular ideas
+</div>
+<div class="space-y-4">
+    {% for idea in ideas %}
+    <div class="p-4 sm:p-5 min-h-[120px] rounded-[20px] sm:rounded-[50px] bg-[#F17E34] grid sm:gap-4">
+        <!-- Top Section -->
+        <div class="flex items-start h-auto">
+            <div class="hidden sm:flex h-[60px] w-[80px] bg-white rounded-2xl border-2 border-black overflow-hidden">
+                <img src="{{ idea.user.profile.avatar.url|default:'/media/avatars/default.png' }}"
+                     class="h-full w-full object-cover" alt="Idea Icon" />
+            </div>
+            <div class="grid grid-rows-2 min-w-[80px] sm:pl-4 sm:pl-5 justify-start">
+                <a href="#"
+                   class="text-white text-base sm:text-2xl md:text-4xl text-start sm:text-center hover:underline">
+                    {{ idea.title }}
+                </a>
+                <div class="flex items-end">
+                    <img src="{% static 'img/Star 7.svg' %}" alt="Star Icon" class="h-4 sm:h-8" />
+                    <p class="h-full text-[#EFC4A8] text-sm sm:text-2xl pl-2 flex items-end">
+                        {{ idea.rating|default:"0.00" }}
+                    </p>
+                </div>
+            </div>
+            <div class="text-end w-full pr-4 sm:pr-10 text-sm sm:text-xl md:text-3xl text-[#303196] font-bold">
+                <p>{{ idea.category }}</p>
+            </div>
+        </div>
+        <!-- Description Section -->
+        <div class="pb-2 text-sm sm:text-lg md:text-2xl text-black font-bold">
+            <p>{{ idea.description }}</p>
+        </div>
+        <!-- Like/Dislike Buttons -->
+        <div class="flex justify-between mt-2">
+            <div class="flex justify-between mt-2">
+    <button class="like-btn" onclick="likeIdea({{ idea.id }})">
+        👍 <span id="likes-{{ idea.id }}">{{ idea.likes|default:"0" }}</span>
+    </button>
+    <button class="dislike-btn" onclick="dislikeIdea({{ idea.id }})">
+        👎 <span id="dislikes-{{ idea.id }}">{{ idea.dislikes|default:"0" }}</span>
+    </button>
+</div>
 
-                
-                
-              
+
+        </div>
+    </div>
+    {% empty %}
+    <p class="text-center text-xl text-gray-500">No ideas found.</p>
+    {% endfor %}
+</div>
+
+
+
+
+
             </section>
             <div class="flex justify-center mt-10 h-auto w-auto text-center text-xl sm:text-3xl text-[#929292]">
               <button>
@@ -133,13 +206,13 @@
               </button>
             </div>
           </main>
-          
+
           <footer class="mt-[200px] w-full bg-[#EFEFEF]">
             <!-- Верхний блок -->
             <div class="h-[100px] w-full bg-[#EFEFEF] flex justify-center items-center">
               <img src="{% static 'img/Group 77.png' %}" alt="Company Logo" class="h-[50px] sm:h-[80px]" />
             </div>
-          
+
             <!-- Нижний блок -->
             <div class="bg-[#DFE6FF] px-4 sm:px-10 md:px-20 py-8 grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 relative">
               <div class="absolute bottom-0 right-0">
@@ -154,7 +227,7 @@
                   <a href="#" class="hover:underline block">FAQ</a>
                 </div>
               </div>
-          
+
               <!-- Соцсети -->
               <div class="text-center">
                 <p class="text-2xl sm:text-3xl lg:text-4xl text-black font-bold">Social media</p>
@@ -164,7 +237,7 @@
                   <a href="#" class="hover:underline block">Instagram</a>
                 </div>
               </div>
-          
+
               <!-- Поддержка -->
               <div class="text-center">
                 <p class="text-2xl sm:text-3xl lg:text-4xl text-black font-bold">Support</p>
@@ -179,4 +252,5 @@
 
     </div>
 </body>
+<script src="{% static 'js/like_dislike.js' %}"></script>
 </html>

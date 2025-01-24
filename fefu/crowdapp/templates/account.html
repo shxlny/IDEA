@@ -73,12 +73,20 @@
                                 </button>
                             </form>
                             <!-- Форма изменения никнейма -->
-                            <div class="w-full pt-4 flex flex-col justify-center items-center">
-                                <input type="text" name="nickname" class="text-[30px] md:text-[55px] font-bold text-[#303196] text-center w-[300px] outline-none bg-white border-4 rounded-[15px] border-[#303196]" value="{{ form.nickname.value|default:user.username }}">
-                                <button type="submit" class="mt-4 w-[80%] h-[40px] bg-[#F17E34] rounded-xl shadow-xl font-bold text-black text-xl md:text-2xl">
-                                    Change Nickname
-                                </button>
-                            </div>
+                            <form method="POST" class="w-full">
+                                {% csrf_token %}
+                                <div class="w-full pt-4 flex flex-col justify-center items-center">
+                                    <!-- Используем ваше поле ввода для никнейма, передавая данные через форму -->
+                                    <input type="text" name="nickname" class="text-[30px] md:text-[55px] font-bold text-[#303196] text-center w-[300px] outline-none bg-white border-4 rounded-[15px] border-[#303196]"
+                                        value="{{ nickname_form.nickname.value|default:user.username }}">
+
+                                    <!-- Кнопка отправки формы -->
+                                    <button type="submit" class="mt-4 w-[80%] h-[40px] bg-[#F17E34] rounded-xl shadow-xl font-bold text-black text-xl md:text-2xl">
+                                        Change Nickname
+                                    </button>
+                                </div>
+                            </form>
+
                         </form>
                     </div>
 
@@ -86,29 +94,31 @@
                     <form method="POST" action="{% url 'add_idea' %}" class="w-full">
                         {% csrf_token %}
                         <div class="w-full flex justify-center">
-                            <textarea class="h-[70px] w-[90%] border-4 rounded-[15px] border-[#303196] font-bold pl-2 pt-2 text-2xl xl:text-[45px]"
-                                name="idea_title" placeholder="title"></textarea>
+                            <textarea name="idea_title" class="h-[70px] w-[90%] border-4 rounded-[15px] border-[#303196] font-bold pl-2 pt-2 text-2xl xl:text-[45px]"
+                                      placeholder="title"></textarea>
                         </div>
                         <div class="w-full flex justify-center">
-                            <textarea class="mt-4 h-[150px] w-[90%] border-4 rounded-[15px] border-[#303196] font-bold p-4 text-2xl xl:text-[40px] resize-none focus:outline-none placeholder:text-gray-400"
-                                name="idea_desc" placeholder="Enter your description"></textarea>
+                            <textarea name="idea_desc" class="mt-4 h-[150px] w-[90%] border-4 rounded-[15px] border-[#303196] font-bold p-4 text-2xl xl:text-[40px] resize-none focus:outline-none placeholder:text-gray-400"
+                                      placeholder="Enter your description"></textarea>
                         </div>
                         <div class="w-full flex justify-center mt-4">
                             <select name="idea_category" class="h-[60px] w-[90%] border-4 rounded-[15px] border-[#303196] font-bold text-2xl xl:text-[40px] p-2 focus:outline-none">
                                 <option value="" disabled selected>Select a category</option>
                                 <option value="Computer science" class="font-bold">Computer science</option>
-                                <option value="technology" class="font-bold">Technology</option>
-                                <option value="science" class="font-bold">Science</option>
-                                <option value="business" class="font-bold">Business</option>
-                                <option value="art" class="font-bold">Art</option>
+                                <option value="Technology" class="font-bold">Technology</option>
+                                <option value="Science" class="font-bold">Science</option>
+                                <option value="Business" class="font-bold">Business</option>
+                                <option value="Art" class="font-bold">Art</option>
                             </select>
                         </div>
                         <div class="flex w-full justify-center">
-                            <button type="submit" id="publishButton" class="mt-4 w-[50%] h-[60px] rounded-xl bg-[#F17E34] text-4xl font-bold text-black shadow-xl">
+                            <button type="submit" class="mt-4 w-[50%] h-[60px] rounded-xl bg-[#F17E34] text-4xl font-bold text-black shadow-xl">
                                 Publish
                             </button>
                         </div>
                     </form>
+
+
                     </form>
 
                 </div>

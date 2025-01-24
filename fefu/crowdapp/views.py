@@ -8,8 +8,8 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Idea
-
+from .models import Idea, IdeaVote
+from django.shortcuts import get_object_or_404
 
 class ProfileForm(forms.ModelForm):
     class Meta:
@@ -162,29 +162,78 @@ def account_view(request):
 @login_required
 def add_idea(request):
     if request.method == 'POST':
-        print("POST request received")  # Отладка
         title = request.POST.get('idea_title')
         description = request.POST.get('idea_desc')
+        category = request.POST.get('idea_category')
 
-        print(f"Title: {title}, Description: {description}")  # Проверка полученных данных
-
-        if not title or not description:
-            messages.error(request, "Both title and description are required!")
-        else:
-            Idea.objects.create(
-                user=request.user,
-                title=title,
-                description=description
-            )
-            print("Idea saved successfully")  # Проверка сохранения
-            messages.success(request, "Your idea has been published!")
+        # Проверка на заполненность полей
+        if not title or not description or not category:
+            messages.error(request, "All fields are required!")
             return redirect('account')
 
-    return render(request, 'account.html')
+        # Сохранение данных в базу
+        Idea.objects.create(
+            title=title,
+            description=description,
+            category=category,
+            user=request.user  # Привязка к текущему пользователю
+        )
+        messages.success(request, "Your idea has been published!")
+        return redirect('main')  # Перенаправление на главную страницу
 
-from django.shortcuts import render
-from .models import Idea
+    return redirect('account')
 
 def main_page(request):
-    ideas = Idea.objects.all()  # Получаем все идеи
+    category = request.GET.get('category')  # Получаем категорию из GET-запроса
+    if category:
+        ideas = Idea.objects.filter(category=category)  # Фильтруем по категории
+    else:
+        ideas = Idea.objects.all()  # Если категория не выбрана, показываем все идеи
     return render(request, 'main.html', {'ideas': ideas})
+
+def like_idea(request, idea_id):
+    if request.method == "POST" and request.user.is_authenticated:
+        try:
+            idea = get_object_or_404(Idea, id=idea_id)
+            vote, created = IdeaVote.objects.get_or_create(user=request.user, idea=idea)
+
+            if vote.vote_type == 'like':
+                return JsonResponse({"success": False, "error": "You already liked this idea."})
+
+            vote.vote_type = 'like'
+            vote.save()
+
+            # Обновляем количество лайков и дизлайков
+            idea.likes = IdeaVote.objects.filter(idea=idea, vote_type='like').count()
+            idea.dislikes = IdeaVote.objects.filter(idea=idea, vote_type='dislike').count()
+            idea.save()
+
+            return JsonResponse({"success": True, "likes": idea.likes, "dislikes": idea.dislikes})
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
+    return JsonResponse({"success": False, "error": "Invalid request or not authenticated."})
+
+
+def dislike_idea(request, idea_id):
+    if request.method == "POST" and request.user.is_authenticated:
+        try:
+            idea = get_object_or_404(Idea, id=idea_id)
+            vote, created = IdeaVote.objects.get_or_create(user=request.user, idea=idea)
+
+            if vote.vote_type == 'dislike':
+                return JsonResponse({"success": False, "error": "You already disliked this idea."})
+
+            vote.vote_type = 'dislike'
+            vote.save()
+
+            # Обновляем количество лайков и дизлайков
+            idea.likes = IdeaVote.objects.filter(idea=idea, vote_type='like').count()
+            idea.dislikes = IdeaVote.objects.filter(idea=idea, vote_type='dislike').count()
+            idea.save()
+
+            return JsonResponse({"success": True, "likes": idea.likes, "dislikes": idea.dislikes})
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
+    return JsonResponse({"success": False, "error": "Invalid request or not authenticated."})
+
+
