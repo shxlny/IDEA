@@ -16,6 +16,9 @@ urlpatterns = [
     path('account/', views.account_view, name='account'),  # Теперь использует account_view
     path('update-photo/', views.update_photo, name='update_photo'),
     path('add-idea/', views.add_idea, name='add_idea'),
+    path('like/<int:idea_id>/', views.like_idea, name='like_idea'),
+    path('dislike/<int:idea_id>/', views.dislike_idea, name='dislike_idea'),
+
 ]
 
 if settings.DEBUG:
