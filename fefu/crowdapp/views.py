@@ -8,8 +8,10 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Idea, IdeaVote
+from .models import Idea, IdeaVote, Comment
 from django.shortcuts import get_object_or_404
+from django.views.decorators.http import require_POST
+
 
 class ProfileForm(forms.ModelForm):
     class Meta:
@@ -236,6 +238,26 @@ def dislike_idea(request, idea_id):
             return JsonResponse({"success": False, "error": str(e)})
     return JsonResponse({"success": False, "error": "Invalid request or not authenticated."})
 
+
 def idea_comments(request, idea_id):
+    """Отображение идеи и комментариев."""
     idea = get_object_or_404(Idea, id=idea_id)
-    return render(request, 'idea_comments.html', {'idea': idea})
+    comments = idea.comments.all()  # Получаем все комментарии, связанные с идеей
+    return render(request, 'idea_comments.html', {'idea': idea, 'comments': comments})
+
+
+
+
+@login_required
+@require_POST
+def add_comment(request, idea_id):
+    """Добавление нового комментария."""
+    idea = get_object_or_404(Idea, id=idea_id)
+    comment_text = request.POST.get('comment')
+    if comment_text:
+        Comment.objects.create(
+            idea=idea,
+            author=request.user,
+            text=comment_text
+        )
+    return redirect('idea_comments', idea_id=idea.id)

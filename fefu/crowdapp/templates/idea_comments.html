@@ -1,16 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 <h1>Комментарии для идеи: {{ idea.title }}</h1>
 
-<p>Описание идеи: {{ idea.description }}</p>
+<p><strong>Описание идеи:</strong> {{ idea.description }}</p>
 
-<p>Функционал комментариев пока не реализован.</p>
+<hr>
+
+<h2>Комментарии:</h2>
+<ul>
+    {% for comment in comments %}
+        <li>
+            <strong>{{ comment.author }}</strong> ({{ comment.created_at|date:"d M Y H:i" }}):
+            {{ comment.text }}
+        </li>
+    {% empty %}
+        <li>Нет комментариев. Будьте первым!</li>
+    {% endfor %}
+</ul>
+
+<hr>
+
+<h2>Добавить комментарий:</h2>
+<form method="post" action="{% url 'add_comment' idea.id %}">
+    {% csrf_token %}
+    <textarea name="comment" rows="3" placeholder="Ваш комментарий..." required></textarea>
+    <br>
+    <button type="submit">Отправить</button>
+</form>
 
 <a href="{% url 'main' %}">Вернуться на главную</a>
-</body>
-</html>
