@@ -12,47 +12,64 @@
 
 <body class="bg-[#EFEFEF]">
     <header class="h-[15vh] w-full bg-[#EFEFEF] p-4 ">
-        <div class="relative h-full flex lg:justify-center items-center space-x-10">
-          <logo class="h-full flex items-center lg:justify-center">
-              <div class="w-[150px] md:w-[200px]">
-                  <img src="{% static 'img/Group 77.png' %}" class="w-[100%] lg:w-full" alt="">
+          <div class="relative h-full flex lg:justify-center items-center space-x-10">
+            <logo class="h-full flex items-center lg:justify-center">
+                <div class="w-[150px] md:w-[200px]">
+                    <img src="{% static 'img/Group 77.png' %}" class="w-[100%] lg:w-full" alt="">
+                </div>
+            </logo>
+            <div class="hidden md:flex justify-center items-center h-full w-[50%]">
+              <div class="h-full flex items-center md:w-full relative">
+                  <button class="absolute size-[25px] right-2">
+                      <img src="{% static 'img/lupa.svg' %}" alt="">
+                  </button>
+                  <input type="text" placeholder="search" class="w-full bg-[#F17E34] placeholder-white text-white text-3xl pl-2 pr-10 pl-[15px] font-bold rounded-2xl">
               </div>
-          </logo>
-          <div class="hidden md:flex justify-center items-center h-full w-[50%]">
-            <div class="h-full flex items-center md:w-full relative">
-                <button class="absolute size-[25px] right-2">
-                    <img src="{% static 'img/lupa.svg' %}" alt="">
+
+            </div>
+            <nav class="hidden lg:grid grid-cols-5 w-full h-full items-center text-center text-[#303196] font-bold lg:text-2xl xl:text-4xl">
+              <a href="{% url 'main' %}" class="underline">Home</a>
+              <a href="{% url 'about' %}" class=" hover:underline">About</a>
+              <a href="{% url 'news' %}" class=" hover:underline">News</a>
+              <a href="#PSH" class=" hover:underline">Contacts</a>
+              <a href="{% url 'login' %}" class=" hidden justify-center hover:underline" id="Login">Log in</a>
+              <!-- Account img -->
+                {% if user.is_authenticated %}
+
+              <div class=" flex justify-center" id="photo">
+                <button class="rounded-full border-2 border-black w-[80px] h-[80px] flex items-center overflow-hidden" onclick="acc()">
+                  <img src="{{ request.user.profile.avatar.url|default:'/media/avatars/default.png' }}" alt="User Avatar">
                 </button>
-                <input type="text" placeholder="search" class="w-full bg-[#F17E34] placeholder-white text-white text-3xl pl-2 pr-10 pl-[15px] font-bold rounded-2xl">
+              </div>
+                <!-- Меню для авторизованных пользователей -->
+                <button class="absolute right-2 lg:hidden h-[50px] w-[50px]" onclick="main()">
+                    <img src="{% static 'img/open-menu_4083576.png' %}" alt="">
+                </button>
+
+                <div id="acc" class="hidden right-20 grid grid-cols-2 gap-2 text-center font-bold text-[#303196] text-xl sm:text-2xl top-[80%] border-2 border-black rounded-2xl py-5 right-0 bg-[#EFEFEF] z-50 shadow-lg h-[80px] w-[300px] absolute">
+                    <a href="{% url 'account' %}" class="hover:underline">Account</a>
+                    <form method="POST" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="hover:underline">Log out</button>
+                    </form>
+                </div>
+            {% else %}
+                <!-- Если пользователь не авторизован, показываем кнопку "Log in" -->
+                <a href="{% url 'login' %}" class="hover:underline" id="Login">Log in</a>
+            {% endif %}
+              <!-- Account img -->
+            </nav>
+
+
+            <div id="Mobile" class="hidden lg:hidden grid grid-cols-5 gap-2 text-center font-bold text-[#303196] text-xl sm:text-2xl top-[80%] border-2 border-black rounded-2xl py-5 right-0 bg-[#EFEFEF] z-50 shadow-lg h-[80px] w-full absolute ">
+              <a href="{% url 'account' %}" class=" hover:underline">Account</a>
+              <a href="{% url 'about' %}" class=" hover:underline">About</a>
+              <a href="{% url 'news' %}" class=" hover:underline">News</a>
+              <a href="#PSH" class=" hover:underline">Contacts</a>
+              <a href="{% url 'login' %}" class=" hover:underline">Log out</a>
             </div>
-                
           </div>
-          <nav class="hidden lg:grid grid-cols-5 w-full h-full items-center text-center text-[#303196] font-bold lg:text-2xl xl:text-4xl">
-            <a href="{% url 'main' %}" class=" hover:underline">Home</a>
-            <a href="{% url 'about' %}" class="hover:underline">About</a>
-            <a href="{% url 'news' %}" class=" hover:underline">News</a>
-            <a href="#PSH" class=" hover:underline">Contacts</a>
-            <a href="{% url 'login' %}" class=" flex justify-center hover:underline" id="Login">Log in</a>
-            <!-- Account img -->
-            <div class=" hidden justify-center" id="photo">
-              <button class="rounded-full border-2 border-black w-[80px] h-[80px] flex items-center overflow-hidden">
-                <img src="{% static 'img/IMG_3811 1.png' %}" alt="">
-              </button>
-            </div>
-            <!-- Account img -->
-          </nav>
-          <button class="absolute right-2 lg:hidden h-[50px] w-[50px]" onclick="main()">
-            <img src="{% static 'img/open-menu_4083576.png' %}" alt="">
-          </button>
-          <div id="Mobile" class="hidden grid grid-cols-5 gap-2 text-center font-bold text-[#303196] text-xl sm:text-2xl top-[80%] border-2 border-black rounded-2xl py-5 right-0 bg-[#EFEFEF] z-50 shadow-lg h-[80px] w-full absolute "> 
-            <a href="{% url 'main' %}" class=" hover:underline">Home</a>
-            <a href="{% url 'about' %}" class=" hover:underline">About</a>
-            <a href="{% url 'news' %}" class=" hover:underline">News</a>
-            <a href="#PSH" class=" hover:underline">Contacts</a>
-            <a href="{% url 'login' %}" class=" hover:underline">Log in</a>
-          </div>  
-        </div>
-      </header>
+        </header>
 
       <main class="block justify-center items-center h-full text-center px-[20px] sm:px-[100px] 2xl:px-[200px]">
         <div class="w-full h-auto flex justify-center text-[60px] font-bold text-[#303196] underline">

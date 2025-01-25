@@ -185,13 +185,18 @@ def add_idea(request):
 
     return redirect('account')
 
+
 def main_page(request):
     category = request.GET.get('category')  # Получаем категорию из GET-запроса
     if category:
-        ideas = Idea.objects.filter(category=category)  # Фильтруем по категории
+        # Фильтруем идеи по категории и сортируем их по количеству лайков (по убыванию)
+        ideas = Idea.objects.filter(category=category).order_by('-likes')
     else:
-        ideas = Idea.objects.all()  # Если категория не выбрана, показываем все идеи
+        # Если категория не выбрана, показываем все идеи, отсортированные по лайкам
+        ideas = Idea.objects.all().order_by('-likes')
+
     return render(request, 'main.html', {'ideas': ideas})
+
 
 def like_idea(request, idea_id):
     if request.method == "POST" and request.user.is_authenticated:
@@ -246,6 +251,7 @@ def idea_comments(request, idea_id):
     return render(request, 'idea_comments.html', {'idea': idea, 'comments': comments})
 
 
+MAX_COMMENT_LENGTH = 100  # Максимальное количество символов в комментарии
 
 
 @login_required
@@ -254,10 +260,19 @@ def add_comment(request, idea_id):
     """Добавление нового комментария."""
     idea = get_object_or_404(Idea, id=idea_id)
     comment_text = request.POST.get('comment')
+
     if comment_text:
+        # Проверка длины комментария
+        if len(comment_text) > MAX_COMMENT_LENGTH:
+            # Если комментарий слишком длинный, выводим ошибку
+            messages.error(request, f"The comment cannot exceed {MAX_COMMENT_LENGTH} characters.")
+            return redirect('idea_comments', idea_id=idea.id)  # Перенаправляем обратно на страницу комментариев
+
+        # Создание нового комментария
         Comment.objects.create(
             idea=idea,
             author=request.user,
             text=comment_text
         )
+
     return redirect('idea_comments', idea_id=idea.id)
