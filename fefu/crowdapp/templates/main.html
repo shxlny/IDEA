@@ -148,25 +148,25 @@
                     {% for idea in ideas %}
                     <div class="p-2 sm:p-6 h-fit rounded-[20px] sm:rounded-[30px] bg-white border-4 border-[#F17E34] shadow-2xl ">
                         <!-- Top Section -->
-                        <div class="flex h-auto ">
+                        <div class="flex flex-row h-auto relative">
                             <div class="h-[60px] w-[60px] sm:h-[120px] sm:w-[120px] flex-none bg-white rounded-2xl border-2 border-black overflow-hidden">
                                 <img src="{{ idea.user.profile.avatar.url|default:'/media/avatars/default.png' }}"
                                      class="h-full w-full object-cover" alt="Idea Icon" />
                             </div>
-                            <div class="w-fit h-auto flex-none pl-4 justify-start">
-                                <div class="w-[75px] sm:w-[300px] break-words">
+                            <div class="w-full flex-initial h-auto break-all pl-4 justify-start">
+                                <div class="w-fit break-all">
                                     <a href="#"
                                    class="text-black font-bold text-2xl md:text-4xl text-start sm:text-center underline">
                                     {{ idea.title }}
                                     </a>
                                 </div>
                                 <!-- Description Section -->
-                                <div class="pt-2 w-[75px] sm:w-[300px] break-words text-sm sm:text-lg md:text-2xl text-black font-bold ">
-                                    <p>{{ idea.description }}</p>
+                                <div class="pt-2 w-fit break-all text-sm sm:text-lg md:text-2xl text-black font-bold ">
+                                    {{ idea.description }}
                                 </div>
                             </div>
-                            <div class="text-end w-full text-[20px] sm:text-xl md:text-3xl text-[#303196] font-bold">
-                                <p>{{ idea.category }}</p>
+                            <div class="flex-none text-end w-fit text-[20px] sm:text-xl md:text-3xl text-[#303196] font-bold">
+                                {{ idea.category }}
                             </div>
                         </div>
                         <!-- Like/Dislike Buttons -->
