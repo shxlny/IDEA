@@ -80,8 +80,8 @@
                     {% for comment in comments %}
                         <li class="p-2 border-4 rounded-[20px] border-[#303196] font-bold bg-white shadow-[50px] mb-2">
                             <div class="flex">
-                                <div class="w-[50px] h-[50px] flex-none rounded-full border-2 border-black">
-
+                                <div class="w-[50px] h-[50px] flex-none rounded-full border-2 border-black overflow-hidden">
+                                    <img src="{{ idea.user.profile.avatar.url|default:'/media/avatars/default.png' }}" alt="Idea Icon">
                                 </div>
                                 <div class="flex flex-col">
                                     <div class="w-full pl-2 flex items-start text-[18px]">
