@@ -186,14 +186,14 @@
                                 </button>
                             </div>
                             <div class="w-full  flex justify-end items-center">
-                                <div class="flex h-full items-center border-4 shadow-[30px] border-[#F17E34] rounded-[15px]">
-                                    <button class="flex h-full items-center w-[32px] h-[32px] sm:w-[64px] sm:h-[64px]"
-                                            onclick="window.location.href='{% url 'idea_comments' idea.id %}'">
+                                <button class="flex h-full items-center border-4 shadow-[30px] border-[#F17E34] rounded-[15px]" onclick="window.location.href='{% url 'idea_comments' idea.id %}'">
+                                    <div class="flex h-full items-center w-[32px] h-[32px] sm:w-[64px] sm:h-[64px]"
+                                            >
                                         <img src="{% static 'img/talker.png' %}" class="comment-btn">
-                                    </button>
+                                    </div>
 
                                     <p class="p-2 font-bold text-black text-[16px] sm:text-[20px]">Comments</p>
-                                </div>
+                                </button>
                             </div>
                         </div>
                     </div>
