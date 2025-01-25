@@ -1,28 +1,30 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django import forms
-from .models import Profile
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import status
+from .models import Profile, Idea, IdeaVote, Comment
 from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.csrf import csrf_exempt
 from django.core.exceptions import ObjectDoesNotExist
-from .models import Idea, IdeaVote, Comment
-from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 
 
+# Модели и формы
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['avatar']  # Убираем удалённые поля
+        fields = ['avatar']  #
         widgets = {
             'avatar': forms.ClearableFileInput(attrs={
                 'class': 'form-control'
             }),
         }
-
 
 class NicknameChangeForm(forms.Form):
     nickname = forms.CharField(
@@ -34,7 +36,7 @@ class NicknameChangeForm(forms.Form):
         })
     )
 
-# Регистрация пользователя
+# Регистрация пользователя (HTML)
 def user_signup(request):
     if request.method == 'POST':
         nickname = request.POST.get('nickname').strip()
@@ -75,7 +77,7 @@ def user_signup(request):
 
     return render(request, 'reg.html')
 
-# Авторизация пользователя
+# Авторизация пользователя (HTML)
 def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('nickname').strip()
@@ -132,20 +134,17 @@ def account_view(request):
     except ObjectDoesNotExist:
         profile = Profile.objects.create(user=request.user)
 
-    # Инициализация форм
     nickname_form = NicknameChangeForm(initial={'nickname': request.user.username})
     profile_form = ProfileForm(instance=profile)
 
     if request.method == 'POST':
         if 'avatar' in request.FILES:
-            # Обработка изменения аватарки
             profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
             if profile_form.is_valid():
                 profile_form.save()
                 messages.success(request, "Avatar updated successfully!")
                 return redirect('account')
         elif 'nickname' in request.POST:
-            # Обработка изменения никнейма
             nickname_form = NicknameChangeForm(request.POST)
             if nickname_form.is_valid():
                 new_nickname = nickname_form.cleaned_data['nickname']
@@ -154,7 +153,6 @@ def account_view(request):
                 messages.success(request, "Nickname updated successfully!")
                 return redirect('account')
 
-    # Возвращаем формы в шаблон
     return render(request, 'account.html', {
         'nickname_form': nickname_form,
         'profile_form': profile_form,
@@ -168,36 +166,22 @@ def add_idea(request):
         description = request.POST.get('idea_desc')
         category = request.POST.get('idea_category')
 
-        # Проверка на заполненность полей
         if not title or not description or not category:
             messages.error(request, "All fields are required!")
             return redirect('account')
 
-        # Сохранение данных в базу
         Idea.objects.create(
             title=title,
             description=description,
             category=category,
-            user=request.user  # Привязка к текущему пользователю
+            user=request.user
         )
         messages.success(request, "Your idea has been published!")
-        return redirect('main')  # Перенаправление на главную страницу
+        return redirect('main')
 
     return redirect('account')
 
-
-def main_page(request):
-    category = request.GET.get('category')  # Получаем категорию из GET-запроса
-    if category:
-        # Фильтруем идеи по категории и сортируем их по количеству лайков (по убыванию)
-        ideas = Idea.objects.filter(category=category).order_by('-likes')
-    else:
-        # Если категория не выбрана, показываем все идеи, отсортированные по лайкам
-        ideas = Idea.objects.all().order_by('-likes')
-
-    return render(request, 'main.html', {'ideas': ideas})
-
-
+# Лайк идеи
 def like_idea(request, idea_id):
     if request.method == "POST" and request.user.is_authenticated:
         try:
@@ -210,7 +194,6 @@ def like_idea(request, idea_id):
             vote.vote_type = 'like'
             vote.save()
 
-            # Обновляем количество лайков и дизлайков
             idea.likes = IdeaVote.objects.filter(idea=idea, vote_type='like').count()
             idea.dislikes = IdeaVote.objects.filter(idea=idea, vote_type='dislike').count()
             idea.save()
@@ -220,7 +203,7 @@ def like_idea(request, idea_id):
             return JsonResponse({"success": False, "error": str(e)})
     return JsonResponse({"success": False, "error": "Invalid request or not authenticated."})
 
-
+# Дизлайк идеи
 def dislike_idea(request, idea_id):
     if request.method == "POST" and request.user.is_authenticated:
         try:
@@ -233,7 +216,6 @@ def dislike_idea(request, idea_id):
             vote.vote_type = 'dislike'
             vote.save()
 
-            # Обновляем количество лайков и дизлайков
             idea.likes = IdeaVote.objects.filter(idea=idea, vote_type='like').count()
             idea.dislikes = IdeaVote.objects.filter(idea=idea, vote_type='dislike').count()
             idea.save()
@@ -243,32 +225,24 @@ def dislike_idea(request, idea_id):
             return JsonResponse({"success": False, "error": str(e)})
     return JsonResponse({"success": False, "error": "Invalid request or not authenticated."})
 
-
+# Комментарии к идее
 def idea_comments(request, idea_id):
-    """Отображение идеи и комментариев."""
     idea = get_object_or_404(Idea, id=idea_id)
-    comments = idea.comments.all()  # Получаем все комментарии, связанные с идеей
+    comments = idea.comments.all()
     return render(request, 'idea_comments.html', {'idea': idea, 'comments': comments})
 
-
-MAX_COMMENT_LENGTH = 100  # Максимальное количество символов в комментарии
-
-
+# Добавление комментария
 @login_required
 @require_POST
 def add_comment(request, idea_id):
-    """Добавление нового комментария."""
     idea = get_object_or_404(Idea, id=idea_id)
     comment_text = request.POST.get('comment')
 
     if comment_text:
-        # Проверка длины комментария
-        if len(comment_text) > MAX_COMMENT_LENGTH:
-            # Если комментарий слишком длинный, выводим ошибку
-            messages.error(request, f"The comment cannot exceed {MAX_COMMENT_LENGTH} characters.")
-            return redirect('idea_comments', idea_id=idea.id)  # Перенаправляем обратно на страницу комментариев
+        if len(comment_text) > 100:
+            messages.error(request, f"The comment cannot exceed 100 characters.")
+            return redirect('idea_comments', idea_id=idea.id)
 
-        # Создание нового комментария
         Comment.objects.create(
             idea=idea,
             author=request.user,
@@ -276,3 +250,181 @@ def add_comment(request, idea_id):
         )
 
     return redirect('idea_comments', idea_id=idea.id)
+
+# API-классы
+
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from .models import Idea, IdeaVote, Comment
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+
+# Регистрация пользователя
+class UserSignupAPIView(APIView):
+    @swagger_auto_schema(
+        operation_description="Register a new user",
+        responses={201: openapi.Response('User created successfully')},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'nickname': openapi.Schema(type=openapi.TYPE_STRING, description='User nickname'),
+                'email': openapi.Schema(type=openapi.TYPE_STRING, description='User email'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='User password'),
+                'repeat_password': openapi.Schema(type=openapi.TYPE_STRING, description='Repeat user password'),
+            }
+        )
+    )
+    def post(self, request):
+        nickname = request.data.get('nickname').strip()
+        email = request.data.get('email').strip()
+        password = request.data.get('password').strip()
+        repeat_password = request.data.get('repeat_password').strip()
+
+        if not nickname or not email or not password or not repeat_password:
+            return Response({"error": "All fields are required!"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if password != repeat_password:
+            return Response({"error": "Passwords do not match!"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if len(password) < 8:
+            return Response({"error": "Password must be at least 8 characters long!"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if User.objects.filter(username=nickname).exists():
+            return Response({"error": "Nickname already taken!"}, status=status.HTTP_400_BAD_REQUEST)
+
+        if User.objects.filter(email=email).exists():
+            return Response({"error": "Email already in use!"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = User.objects.create_user(username=nickname, email=email, password=password)
+        user.save()
+        return Response({"message": "Registration successful!"}, status=status.HTTP_201_CREATED)
+
+# Авторизация пользователя
+class UserLoginAPIView(APIView):
+    @swagger_auto_schema(
+        operation_description="Authenticate a user",
+        responses={200: openapi.Response('Successfully logged in'), 400: openapi.Response('Invalid credentials')},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'nickname': openapi.Schema(type=openapi.TYPE_STRING, description='User nickname'),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, description='User password'),
+            }
+        )
+    )
+    def post(self, request):
+        username = request.data.get('nickname').strip()
+        password = request.data.get('password').strip()
+
+        if not username or not password:
+            return Response({"error": "Both nickname and password are required!"}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            return Response({"message": "Successfully logged in!"}, status=status.HTTP_200_OK)
+        return Response({"error": "Invalid nickname or password!"}, status=status.HTTP_400_BAD_REQUEST)
+
+# Добавление идеи
+class AddIdeaAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_description="Add a new idea",
+        responses={201: openapi.Response('Idea added successfully')},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'idea_title': openapi.Schema(type=openapi.TYPE_STRING, description='Title of the idea'),
+                'idea_desc': openapi.Schema(type=openapi.TYPE_STRING, description='Description of the idea'),
+                'idea_category': openapi.Schema(type=openapi.TYPE_STRING, description='Category of the idea'),
+            }
+        )
+    )
+    def post(self, request):
+        title = request.data.get('idea_title')
+        description = request.data.get('idea_desc')
+        category = request.data.get('idea_category')
+
+        if not title or not description or not category:
+            return Response({"error": "All fields are required!"}, status=status.HTTP_400_BAD_REQUEST)
+
+        Idea.objects.create(
+            title=title,
+            description=description,
+            category=category,
+            user=request.user
+        )
+        return Response({"message": "Your idea has been published!"}, status=status.HTTP_201_CREATED)
+
+# Лайк идеи
+class LikeIdeaAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_description="Like an idea",
+        responses={200: openapi.Response('Idea liked successfully'), 400: openapi.Response('You already liked this idea')},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={}
+        )
+    )
+    def post(self, request, idea_id):
+        idea = get_object_or_404(Idea, id=idea_id)
+        vote, created = IdeaVote.objects.get_or_create(user=request.user, idea=idea)
+
+        if vote.vote_type == 'like':
+            return Response({"error": "You already liked this idea."}, status=status.HTTP_400_BAD_REQUEST)
+
+        vote.vote_type = 'like'
+        vote.save()
+
+        idea.likes = IdeaVote.objects.filter(idea=idea, vote_type='like').count()
+        idea.dislikes = IdeaVote.objects.filter(idea=idea, vote_type='dislike').count()
+        idea.save()
+
+        return Response({"success": True, "likes": idea.likes, "dislikes": idea.dislikes}, status=status.HTTP_200_OK)
+
+# Добавление комментария
+class AddCommentAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @swagger_auto_schema(
+        operation_description="Add a comment to an idea",
+        responses={201: openapi.Response('Comment added successfully')},
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'comment': openapi.Schema(type=openapi.TYPE_STRING, description='Text of the comment'),
+            }
+        )
+    )
+    def post(self, request, idea_id):
+        idea = get_object_or_404(Idea, id=idea_id)
+        comment_text = request.data.get('comment')
+
+        if len(comment_text) > 100:
+            return Response({"error": "The comment cannot exceed 100 characters."}, status=status.HTTP_400_BAD_REQUEST)
+
+        Comment.objects.create(
+            idea=idea,
+            author=request.user,
+            text=comment_text
+        )
+
+        return Response({"message": "Comment added successfully!"}, status=status.HTTP_201_CREATED)
+
+
+def main_page(request):
+    category = request.GET.get('category')
+    if category:
+        ideas = Idea.objects.filter(category=category).order_by('-likes')
+    else:
+        ideas = Idea.objects.all().order_by('-likes')
+
+    print(f"Retrieved ideas: {ideas}")  # Проверка, какие данные подгружаются
+    return render(request, 'main.html', {'ideas': ideas})
