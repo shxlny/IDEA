@@ -1,5 +1,4 @@
 function likeIdea(ideaId) {
-    console.log("Like button clicked for idea:", ideaId); // Лог клика по лайку
     fetch(`/like/${ideaId}/`, {
         method: 'POST',
         headers: {
@@ -8,32 +7,23 @@ function likeIdea(ideaId) {
         },
     })
     .then(response => {
-        console.log("Response status:", response.status); // Лог статуса ответа
         return response.json();
     })
     .then(data => {
-        console.log("Response data:", data); // Лог данных ответа
         if (data.success) {
-            // Обновляем текст лайков и дизлайков
             document.getElementById(`likes-${ideaId}`).textContent = data.likes;
             document.getElementById(`dislikes-${ideaId}`).textContent = data.dislikes;
 
-            // Лог обновления текста
             console.log(`Likes updated to: ${data.likes}`);
             console.log(`Dislikes updated to: ${data.dislikes}`);
 
-            // Меняем цвет кнопок
             const likeBtn = document.getElementById(`like-btn-${ideaId}`);
             const dislikeBtn = document.getElementById(`dislike-btn-${ideaId}`);
 
-            console.log("Like Button Element:", likeBtn); // Лог кнопки лайка
-            console.log("Dislike Button Element:", dislikeBtn); // Лог кнопки дизлайка
-
-            // Добавляем зеленую подсветку для лайка
             likeBtn.classList.add('bg-green-200');
-            likeBtn.classList.remove('border-[#F17E34]'); // Убираем стандартную рамку
+            likeBtn.classList.remove('border-[#F17E34]');
 
-            // Возвращаем стандартный стиль для дизлайка
+
             dislikeBtn.classList.remove('bg-red-200');
             dislikeBtn.classList.add('border-[#F17E34]');
         } else {

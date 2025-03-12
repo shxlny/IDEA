@@ -1,18 +1,21 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django import forms
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import status
 from .models import Profile, Idea, IdeaVote, Comment
 from django.http import JsonResponse
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+from django.contrib.auth.models import User
 
 
 # Модели и формы
@@ -126,7 +129,7 @@ def update_photo(request):
         return JsonResponse({'success': True})
     return JsonResponse({'success': False})
 
-# Account view: профайл + изменение никнейма
+# Account view
 @login_required
 def account_view(request):
     try:
@@ -251,19 +254,7 @@ def add_comment(request, idea_id):
 
     return redirect('idea_comments', idea_id=idea.id)
 
-# API-классы
 
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg import openapi
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
-from .models import Idea, IdeaVote, Comment
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
-
-# Регистрация пользователя
 class UserSignupAPIView(APIView):
     @swagger_auto_schema(
         operation_description="Register a new user",
@@ -301,7 +292,9 @@ class UserSignupAPIView(APIView):
 
         user = User.objects.create_user(username=nickname, email=email, password=password)
         user.save()
-        return Response({"message": "Registration successful!"}, status=status.HTTP_201_CREATED)
+
+        return redirect('login')
+
 
 # Авторизация пользователя
 class UserLoginAPIView(APIView):
@@ -359,7 +352,7 @@ class AddIdeaAPIView(APIView):
             category=category,
             user=request.user
         )
-        return Response({"message": "Your idea has been published!"}, status=status.HTTP_201_CREATED)
+        return redirect('main')
 
 # Лайк идеи
 class LikeIdeaAPIView(APIView):
@@ -404,11 +397,15 @@ class AddCommentAPIView(APIView):
         )
     )
     def post(self, request, idea_id):
-        idea = get_object_or_404(Idea, id=idea_id)
         comment_text = request.data.get('comment')
+
+        if not comment_text:
+            return Response({"error": "Comment cannot be empty."}, status=status.HTTP_400_BAD_REQUEST)
 
         if len(comment_text) > 100:
             return Response({"error": "The comment cannot exceed 100 characters."}, status=status.HTTP_400_BAD_REQUEST)
+
+        idea = get_object_or_404(Idea, id=idea_id)
 
         Comment.objects.create(
             idea=idea,
@@ -416,7 +413,7 @@ class AddCommentAPIView(APIView):
             text=comment_text
         )
 
-        return Response({"message": "Comment added successfully!"}, status=status.HTTP_201_CREATED)
+        return redirect('idea_comments', idea_id=idea.id)
 
 
 def main_page(request):
@@ -426,5 +423,4 @@ def main_page(request):
     else:
         ideas = Idea.objects.all().order_by('-likes')
 
-    print(f"Retrieved ideas: {ideas}")  # Проверка, какие данные подгружаются
     return render(request, 'main.html', {'ideas': ideas})

@@ -3,11 +3,11 @@ from django.contrib.auth.models import User
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    nickname = models.CharField(max_length=100, blank=True, null=True)  # Поле для никнейма
-    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)  # Поле для аватара
+    nickname = models.CharField(max_length=100, blank=True, null=True)
+    avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
 
     def __str__(self):
-        return self.nickname or self.user.username  # Возвращает nickname, если он есть, иначе username
+        return self.nickname or self.user.username
 
 class Idea(models.Model):
     title = models.CharField(max_length=255)
