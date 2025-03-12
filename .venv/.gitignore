@@ -1,0 +1,15 @@
+# IDE
+.idea/
+
+# macOS скрытые файлы
+.DS_Store
+
+# Python venv
+venv/
+.venv/
+
+# Python bytecode
+__pycache__/
+
+# База данных
+db.sqlite3
